@@ -33,6 +33,26 @@
     color: #566a7f;
 }
 
+/* 테이블 정렬 스타일 */
+.sortable { 
+	cursor: pointer; 
+	user-select: none; 
+	position: relative; 
+}
+.sortable:hover { 
+	background-color: #f0f2f4; 
+	color: #696cff; 
+}
+
+.sort-icon { 
+	font-size: 0.9em; 
+	margin-left: 5px; 
+	color: #969696; 
+}
+.sort-active { 
+	color: #696cff;
+} 
+
 /* 콘텐츠 영역 스타일 */
 #tab-content-area {
     min-height: 600px;
