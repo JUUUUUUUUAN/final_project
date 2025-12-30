@@ -10,9 +10,9 @@
                         <label class="form-label small text-muted">계약 상태</label>
                         <select class="form-select" id="searchContractStatus">
                             <option value="">전체</option>
+                            <option value="PENDING">대기 (PENDING)</option>
                             <option value="ACTIVE">유효 (Active)</option>
                             <option value="EXPIRED">만료 (Expired)</option>
-                            <option value="TERMINATED">해지 (Terminated)</option>
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -94,7 +94,6 @@
 		                	계약 종료일 <i class="bx bx-sort-alt-2 sort-icon"></i>
 		                </th>
 		                <th>상태</th>
-		              	<th></th>
 		            </tr>
 	          	</thead>
 	            
@@ -102,7 +101,11 @@
 	            	<c:forEach items="${list}" var="dto">
 	       				<tr>
 	         				<td>${dto.contractId}</td>
-				            <td><span class="fw-bold text-primary">${dto.storeName}</span></td>
+				            <td>
+				            	<a href="javascript:void(0);"
+				            	   class="fw-bold text-primary"
+				            	   onclick="getContractDetail('${dto.contractId}')">${dto.storeName}</a>
+				            </td>
 				            <td class="text-end">
 				            	<fmt:formatNumber value="${dto.contractRoyalti}" pattern="#,###" />
 				            </td>
@@ -112,12 +115,10 @@
 				            <td>${dto.contractStartDate}</td>
 				            <td>${dto.contractEndDate}</td>
 				            <td>
+				            	<c:if test="${dto.contractStatus eq 0}"><span class="badge bg-label-warning">PENDING</span></c:if>
 				            	<c:if test="${dto.contractStatus eq 1}"><span class="badge bg-label-info">ACTIVE</span></c:if>
-				            	<c:if test="${dto.contractStatus eq 2}"><span class="badge bg-label-warning">EXPIRED</span></c:if>
+				            	<c:if test="${dto.contractStatus eq 2}"><span class="badge bg-label-danger">EXPIRED</span></c:if>
 				            </td>
-	                        <td>
-	                        	<button class="btn btn-sm btn-icon btn-outline-secondary"><i class="bx bx-edit"></i></button>
-	                     	</td>
 	                    </tr>
 	                </c:forEach>
 	            </tbody>
@@ -224,6 +225,62 @@
             </div>
         </div>
     </div>
+    
+    <div class="modal fade" id="detailContractModal" tabindex="-1" aria-hidden="true">
+	    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">계약 상세 정보</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="row g-3">
+	                    <div class="col-md-6">
+	                        <label class="form-label text-muted small">계약 번호</label>
+	                        <input type="text" id="detailContractId" class="form-control bg-white fw-bold" readonly />
+	                    </div>
+	                    <div class="col-md-6">
+	                        <label class="form-label text-muted small">가맹점명</label>
+	                        <input type="text" id="detailStoreName" class="form-control bg-white" readonly />
+	                    </div>
+	                    <div class="col-12"><hr class="my-1 border-light"></div>
+	                    <div class="col-md-6">
+	                        <label class="form-label text-muted small">로얄티</label>
+	                        <input type="text" id="detailRoyalty" class="form-control bg-white" readonly />
+	                    </div>
+	                    <div class="col-md-6">
+	                        <label class="form-label text-muted small">여신(보증금)</label>
+	                        <input type="text" id="detailDeposit" class="form-control bg-white" readonly />
+	                    </div>
+	                    <div class="col-md-4">
+	                        <label class="form-label text-muted small">시작일</label>
+	                        <input type="text" id="detailStartDate" class="form-control bg-white" readonly />
+	                    </div>
+	                    <div class="col-md-4">
+	                        <label class="form-label text-muted small">종료일</label>
+	                        <input type="text" id="detailEndDate" class="form-control bg-white" readonly />
+	                    </div>
+	                    <div class="col-md-4">
+	                        <label class="form-label text-muted small">상태</label>
+	                        <div id="detailStatusArea"></div>
+	                    </div>
+	                    
+	                    <div class="col-12 mt-4">
+	                        <h6 class="text-muted mb-3"><i class="bx bx-file"></i> 첨부파일 다운로드</h6>
+	                        <ul class="list-group" id="detailFileList">
+	                            </ul>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="modal-footer d-flex justify-content-between">
+	                <button type="button" class="btn btn-danger" onclick="downloadContractPdf()">
+	                    <i class="bx bxs-file-pdf me-1"></i> 계약서 PDF 저장
+	                </button>
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
     
     <script type="text/javascript" src="/js/store/tab_contract.js"></script>
     

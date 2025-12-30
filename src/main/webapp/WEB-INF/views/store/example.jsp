@@ -228,14 +228,55 @@
                                         <tbody>
                                             <tr>
                                                 <td>1</td>
-                                                <td><a href="javascript:void(0);" class="fw-bold">CT-2024-001</a></td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="fw-bold" 
+                                                       onclick="openContractDetail('CT-2024-001', '강남 본점', '150,000', '50,000,000', '2024-01-01', '2026-01-01', 'ACTIVE')">
+                                                        CT-2024-001
+                                                    </a>
+                                                </td>
                                                 <td><a href="javascript:void(0);" class="text-dark">강남 본점</a></td>
-                                                <td>3.5%</td>
+                                                <td>150,000원</td>
                                                 <td>50,000,000원</td>
                                                 <td>2024-01-01</td>
                                                 <td>2026-01-01</td>
                                                 <td><span class="badge bg-label-primary">ACTIVE</span></td>
                                                 <td><button class="btn btn-sm btn-icon btn-outline-secondary"><i class="bx bx-edit"></i></button></td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="fw-bold"
+                                                       onclick="openContractDetail('CT-2023-088', '부산 서면점', '150,000', '30,000,000', '2023-05-01', '2025-05-01', 'ACTIVE')">
+                                                        CT-2023-088
+                                                    </a>
+                                                </td>
+                                                <td><a href="javascript:void(0);" class="text-dark">부산 서면점</a></td>
+                                                <td>150,000원</td>
+                                                <td>30,000,000원</td>
+                                                <td>2023-05-01</td>
+                                                <td>2025-05-01</td>
+                                                <td><span class="badge bg-label-primary">ACTIVE</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-icon btn-outline-secondary"><i class="bx bx-edit"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="fw-bold text-muted"
+                                                       onclick="openContractDetail('CT-2020-012', '제주 공항점', '150,000', '20,000,000', '2020-03-01', '2022-03-01', 'EXPIRED')">
+                                                        CT-2020-012
+                                                    </a>
+                                                </td>
+                                                <td><a href="javascript:void(0);" class="text-dark">제주 공항점</a></td>
+                                                <td>150,000원</td>
+                                                <td>20,000,000원</td>
+                                                <td>2020-03-01</td>
+                                                <td>2022-03-01</td>
+                                                <td><span class="badge bg-label-danger">EXPIRED</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-icon btn-outline-secondary"><i class="bx bx-edit"></i></button>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -350,13 +391,15 @@
                                 </select>
                             </div>
                             <div class="col-12"><hr class="my-2"></div>
+                            
                             <div class="col-md-6">
-                                <label class="form-label" for="royalty">로얄티 (%)</label>
+                                <label class="form-label" for="royalty">로얄티 (금액)</label>
                                 <div class="input-group">
-                                    <input type="number" id="royalty" class="form-control" placeholder="3.5" step="0.1" />
-                                    <span class="input-group-text">%</span>
+                                    <input type="number" id="royalty" class="form-control" placeholder="150000" />
+                                    <span class="input-group-text">원</span>
                                 </div>
                             </div>
+                            
                             <div class="col-md-6">
                                 <label class="form-label" for="deposit">여신 (보증금)</label>
                                 <div class="input-group">
@@ -383,7 +426,7 @@
                             </div>
 
                             <div class="col-12 mt-3">
-                                <label class="form-label">첨부파일</label>
+                                <label class="form-label">계약서 및 첨부파일</label>
                                 <div id="fileContainer">
                                     <div class="input-group mb-2">
                                         <input type="file" class="form-control" name="contractFiles">
@@ -393,7 +436,7 @@
                                     </div>
                                 </div>
                                 <div class="form-text small text-muted">
-                                    ※ + 버튼을 누르면 첨부파일 칸이 추가됩니다.
+                                    ※ 버튼을 누르면 첨부파일 칸이 추가됩니다.
                                 </div>
                             </div>
 
@@ -403,6 +446,80 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
                     <button type="button" class="btn btn-primary" onclick="submitContractRegistration()">계약 저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detailContractModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">📋 계약 상세 정보</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">계약 번호</label>
+                            <input type="text" id="detailContractId" class="form-control bg-white fw-bold" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">가맹점명</label>
+                            <input type="text" id="detailStoreName" class="form-control bg-white" readonly />
+                        </div>
+                        <div class="col-12"><hr class="my-1 border-light"></div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">로얄티</label>
+                            <input type="text" id="detailRoyalty" class="form-control bg-white" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">여신(보증금)</label>
+                            <input type="text" id="detailDeposit" class="form-control bg-white" readonly />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">시작일</label>
+                            <input type="text" id="detailStartDate" class="form-control bg-white" readonly />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">종료일</label>
+                            <input type="text" id="detailEndDate" class="form-control bg-white" readonly />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">상태</label>
+                            <input type="text" id="detailStatus" class="form-control bg-white" readonly />
+                        </div>
+                        
+                        <div class="col-12 mt-4">
+                            <h6 class="text-muted mb-3"><i class="bx bx-file"></i> 첨부파일 다운로드</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bx bxs-file-pdf text-danger me-2 fs-4"></i>
+                                        <span>2024_표준가맹계약서.pdf</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="downloadAttachment('contract.pdf')">
+                                        <i class="bx bx-download"></i> 다운로드
+                                    </button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bx bxs-file-image text-primary me-2 fs-4"></i>
+                                        <span>사업자등록증_사본.jpg</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="downloadAttachment('license.jpg')">
+                                        <i class="bx bx-download"></i> 다운로드
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-danger" onclick="downloadContractPdf()">
+                        <i class="bx bxs-file-pdf me-1"></i> 계약서 PDF 저장
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -459,7 +576,6 @@
 
     // 5. 계약 등록 저장
     function submitContractRegistration() {
-        // 실제로는 여기서 form data를 수집하여 AJAX 전송
         alert("신규 계약이 등록되었습니다.");
         $('#registerContractModal').modal('hide');
     }
@@ -482,6 +598,34 @@
 
     function removeFileField(button) {
         button.parentElement.remove();
+    }
+    
+    /* =========================================
+       [계약 상세 조회 기능] (NEW)
+       ========================================= */
+    function openContractDetail(id, store, royalty, deposit, start, end, status) {
+        // 모달 필드에 값 채워넣기
+        $('#detailContractId').val(id);
+        $('#detailStoreName').val(store);
+        $('#detailRoyalty').val(royalty + "원");
+        $('#detailDeposit').val(deposit + "원");
+        $('#detailStartDate').val(start);
+        $('#detailEndDate').val(end);
+        $('#detailStatus').val(status);
+        
+        // 모달 띄우기
+        $('#detailContractModal').modal('show');
+    }
+
+    // PDF 다운로드 (shell)
+    function downloadContractPdf() {
+        const id = $('#detailContractId').val();
+        alert(`[${id}] 계약서 문서를 PDF로 생성하여 다운로드합니다.`);
+    }
+
+    // 첨부파일 다운로드 (shell)
+    function downloadAttachment(fileName) {
+        alert(`첨부파일 [${fileName}] 을(를) 다운로드합니다.`);
     }
     
     // 가맹점 조회 로직 (기존)

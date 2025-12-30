@@ -15,4 +15,6 @@ public interface ContractDAO {
 
 	public int fileAdd(ContractFileDTO contractFileDTO);
 
+	public ContractDTO getDetail(String contractId);
+
 }

@@ -55,4 +55,8 @@ public class ContractService {
 		return result;
 	}
 
+	public ContractDTO getDetail(String contractId) {
+		return contractDAO.getDetail(contractId);
+	}
+
 }

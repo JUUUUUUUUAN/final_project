@@ -2,6 +2,7 @@ package com.cafe.erp.store.contract;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,4 +25,7 @@ public class ContractDTO {
 	
 	// store table column
 	private String storeName;
+	
+	// store_contract_file table
+	private List<ContractFileDTO> fileDTOs;
 }

@@ -33,7 +33,6 @@ public class ContractController {
 	@PostMapping("/add") 
 	@ResponseBody
 	public Map<String, Object> addContract(@ModelAttribute ContractDTO contractDTO, @RequestParam(value = "files", required = false) List<MultipartFile> files) throws Exception { 
-		System.out.println(contractDTO);
 		int result = contractService.add(contractDTO, files);
 	 
 		Map<String, Object> response = new HashMap<>();
@@ -47,6 +46,12 @@ public class ContractController {
 		}
 		
 		return response; 
+	}
+	
+	@GetMapping("/detail")
+	@ResponseBody
+	public ContractDTO getDetail(@RequestParam String contractId) throws Exception {
+		return contractService.getDetail(contractId);
 	}
 
 }

@@ -181,3 +181,80 @@ async function submitContractRegistration() {
 	}	
 	
 }
+
+async function getContractDetail(contractId) {
+	try {
+		const url = `/store/tab/contract/detail?contractId=${contractId}`;
+		const response = await fetch (url, { method : "GET"});
+		
+		if (!response.ok) {
+			throw new Error(`Error : ${response.status}`);
+		}
+		
+		const data = await response.json();
+		
+		document.getElementById('detailContractId').value = data.contractId;
+        document.getElementById('detailStoreName').value = data.storeName;
+        document.getElementById('detailStartDate').value = data.contractStartDate;
+        document.getElementById('detailEndDate').value = data.contractEndDate;
+
+        document.getElementById('detailRoyalty').value = new Intl.NumberFormat('ko-KR').format(data.contractRoyalti) + " 원";
+        document.getElementById('detailDeposit').value = new Intl.NumberFormat('ko-KR').format(data.contractDeposit) + " 원";
+
+		const statusArea = document.getElementById('detailStatusArea');
+		let badgeHtml = '';
+		
+		switch (data.contractStatus) {
+			case 0:
+				badgeHtml = '<span class="badge bg-label-warning">PENDING</span>';
+				break;
+			case 1:
+				badgeHtml = '<span class="badge bg-label-info">ACTIVE</span>';
+				break;
+			case 2:
+				badgeHtml = '<span class="badge bg-label-danger">EXPIRED</span>'; 
+				break;
+			default:
+				badgeHtml = '<span class="badge bg-label-secondary">UNKNOWN</span>';
+		}
+		
+		statusArea.innerHTML = badgeHtml;
+        
+		
+		// file
+		const fileListEl = document.getElementById('detailFileList');
+		fileListEl.innerHTML = "";
+		
+		if (data.fileDTOs && data.fileDTOs.length > 0) {
+			data.fileDTOs.forEach(file => {
+				const li = document.createElement('li');
+				li.className = "list-group-item d-flex justify-content-between align-items-center";
+				
+				let iconClass = "bx bxs-file-blank text-secondary";
+                if(file.fileOriginalName.includes('.pdf')) iconClass = "bx bxs-file-pdf text-danger";
+                else if(file.fileOriginalName.includes('.jpg') || file.fileOriginalName.includes('.png')) iconClass = "bx bxs-file-image text-primary";
+
+                li.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="${iconClass} me-2 fs-4"></i>
+                        <span>${file.fileOriginalName}</span>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="downloadAttachment('${file.fileSavedName}')">
+                        <i class="bx bx-download"></i> 다운로드
+                    </button>
+                `;
+                fileListEl.appendChild(li);
+			});
+		} else {
+			fileListEl.innerHTML = `<li class="list-group-item text-center text-muted">첨부된 파일이 없습니다.</li>`;
+		}
+		
+		var modalEl = document.getElementById('detailContractModal');
+		var modal = new bootstrap.Modal(modalEl);
+		modal.show();
+	} catch (error) {
+		console.error("계약 상세 조회 오류 : ", error);
+		alert("계약 상세 정보를 불러오는데 실패했습니다.");
+	} 
+	
+}
