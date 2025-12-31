@@ -56,6 +56,7 @@
 		LIMIT #{pager.perPage} OFFSET #{pager.startNum}
   	</select>
   	
+  	<!-- 페이지네이션 갯수 -->
   	<select 
   		id="receivableSearchCount"
   		parameterType="ReceivableSearchDTO"
