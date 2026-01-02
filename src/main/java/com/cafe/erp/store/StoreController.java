@@ -27,25 +27,19 @@ public class StoreController {
 
 	@GetMapping("example")
 	public String list() throws Exception {
-		return "/store/example";
+		return "store/example";
 	}
 
-	@GetMapping("main")
-	public String main(Model model) {
+	@GetMapping("list")
+	public String main(Model model) throws Exception {
 		model.addAttribute("kakaoKey", kakaoKey);
-		return "store/main";
-	}
-
-//	store list tab
-	@GetMapping("tab/store")
-	public String storeList(Model model) throws Exception {
 		List<StoreDTO> storeList = storeService.list();
 		model.addAttribute("list", storeList);
-
+		
 		return "store/tab_store";
 	}
 
-	@PostMapping("tab/store/add") 
+	@PostMapping("add") 
 	@ResponseBody
 	public Map<String, Object> addStore(@RequestBody StoreDTO storeDTO) throws Exception { 
 		int result = storeService.add(storeDTO);
@@ -65,7 +59,7 @@ public class StoreController {
 	
 	
 	// contract list tab
-	@GetMapping("tab/store/search/store")
+	@GetMapping("search")
 	@ResponseBody
 	public List<StoreDTO> searchStore(@RequestParam String keyword) throws Exception {
 		return storeService.searchStore(keyword);

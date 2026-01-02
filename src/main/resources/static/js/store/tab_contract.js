@@ -3,10 +3,79 @@ var currentContractData = null;
 var deletedFileIds = [];
 var isContractUpdated = false;
 
+document.addEventListener("DOMContentLoaded", function() {
+    const monthInput = document.getElementById("searchStartMonthFrom");
+    if (monthInput) {
+        flatpickr(monthInput, {
+            locale: "ko", 
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true, 
+                    dateFormat: "Y-m", 
+                    altFormat: "Y년 F", 
+                    theme: "light"
+                })
+            ],
+            allowInput: false, 
+            disableMobile: "true" 
+        });
+    }
+	
+	const detailModal = document.getElementById('detailContractModal');
+    if (detailModal) {
+        detailModal.addEventListener('hidden.bs.modal', function () {
+            if (isContractUpdated) {
+                location.reload(); 
+                isContractUpdated = false;
+            }
+        });
+    }
+});
+
 // 금액 formatter
 function formatCurrency(amount) {
     if (amount === undefined || amount === null) return "0 원";
     return new Intl.NumberFormat('ko-KR').format(amount) + " 원";
+}
+
+function getFileIconClass(fileName) {
+    if (!fileName) return "bx bxs-file-blank text-secondary";
+    if (fileName.includes('.pdf')) return "bx bxs-file-pdf text-danger";
+    if (fileName.match(/\.(jpg|jpeg|png)$/i)) return "bx bxs-file-image text-primary";
+    return "bx bxs-file-blank text-secondary";
+}
+
+function getContractStatusByDate(startDateStr) {
+    if (!startDateStr) return 1; // 기본값에 대한 확인 필요
+    
+    const startDate = new Date(startDateStr);
+    startDate.setHours(0, 0, 0, 0);
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return startDate > today ? 0 : 1;
+}
+
+function appendFileField(containerId, inputName) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const newDiv = document.createElement('div');
+    newDiv.className = 'input-group mb-2';
+    newDiv.innerHTML = `
+        <input type="file" class="form-control" name="${inputName}">
+        <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.remove()">
+            <i class="bx bx-minus"></i>
+        </button>
+    `;
+    container.appendChild(newDiv);
+}
+
+async function fetchJson(url, options = {}) {
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+    return response.json();
 }
 
 async function searchStore() {
@@ -20,14 +89,11 @@ async function searchStore() {
 
     try {
         const params = new URLSearchParams({ keyword: keyword });
-        const response = await fetch(`/store/tab/store/search/store?${params.toString()}`, {
+		const data = await 	fetchJson(`/store/search?${params.toString()}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
-
-        if (!response.ok) throw new Error(`서버 오류: ${response.status}`);
-
-        const data = await response.json();
+				
         let listHtml = "";
 
         if (data.length === 0) {
@@ -78,20 +144,7 @@ document.addEventListener('click', function(e) {
 });
 
 function addFileField() {
-    const container = document.getElementById('fileContainer');
-    const newDiv = document.createElement('div');
-    newDiv.className = 'input-group mb-2';
-    newDiv.innerHTML = `
-        <input type="file" class="form-control" name="contractFiles">
-        <button type="button" class="btn btn-outline-danger" onclick="removeFileField(this)">
-            <i class="bx bx-minus"></i>
-        </button>
-    `;
-    container.appendChild(newDiv);
-}
-
-function removeFileField(button) {
-    button.parentElement.remove();
+	appendFileField('fileContainer', 'contractFiles')
 }
 
 (function() {
@@ -147,14 +200,7 @@ async function submitContractRegistration() {
     formData.append("contractStartDate", els.startDate.value);
     formData.append("contractEndDate", els.endDate.value);
 	
-	const startDate = new Date(els.startDate.value);
-	startDate.setHours(0, 0, 0, 0);
-	const today = new Date();
-	today.setHours(0, 0, 0, 0);
-	
-	var status = 1;
-	if (startDate > today) status = 0;
-	
+	const status = getContractStatusByDate(els.startDate.value);
     formData.append("contractStatus", status);
 
     const fileInputs = document.getElementsByName("contractFiles");
@@ -165,7 +211,7 @@ async function submitContractRegistration() {
     }
 
     try {
-        const response = await fetch('/store/tab/contract/add', {
+        const response = await fetch('/store/contract/add', {
             method: 'POST',
             body: formData
         });
@@ -178,7 +224,7 @@ async function submitContractRegistration() {
         const modalInstance = bootstrap.Modal.getInstance(modalEl);
         if (modalInstance) modalInstance.hide();
         
-        loadTab('contract');
+        location.reload();
     } catch (error) {
         console.error('Error:', error);
         alert("등록 중 오류가 발생했습니다.");
@@ -187,12 +233,7 @@ async function submitContractRegistration() {
 
 async function getContractDetail(contractId) {
     try {
-        const url = `/store/tab/contract/detail?contractId=${contractId}`;
-        const response = await fetch(url, { method: "GET" });
-
-        if (!response.ok) throw new Error(`Error : ${response.status}`);
-
-        const data = await response.json();
+		const data = await fetchJson(`/store/contract/detail?contractId=${contractId}`, { method: "GET" });
         
 		// 전역 변수에 저장
         currentContractData = data; 
@@ -224,9 +265,7 @@ async function getContractDetail(contractId) {
 	            const li = document.createElement('li');
 	            li.className = "list-group-item d-flex justify-content-between align-items-center"; 
 
-	            let iconClass = "bx bxs-file-blank text-secondary";
-	            if (file.fileOriginalName.includes('.pdf')) iconClass = "bx bxs-file-pdf text-danger";
-	            else if (file.fileOriginalName.match(/\.(jpg|jpeg|png)$/i)) iconClass = "bx bxs-file-image text-primary";
+	            const iconClass = getFileIconClass(file.fileOriginalName);
 
 	            li.innerHTML = `
 	                <div class="d-flex align-items-center overflow-hidden">
@@ -244,16 +283,6 @@ async function getContractDetail(contractId) {
 	    }
 
         const modalEl = document.getElementById('detailContractModal');
-		const isAlreadyShown = modalEl.classList.contains('show');
-		
-		if (!isAlreadyShown) {
-			isContractUpdated = false;
-			
-			modalEl.addEventListener('hidden.bs.modal', function () {
-				if (isContractUpdated && typeof loadTab === 'function') loadTab('contract');
-			}, { once: true });
-		}
-		
 		let modal = bootstrap.Modal.getInstance(modalEl);
 		if (!modal) {
 	        modal = new bootstrap.Modal(modalEl);
@@ -287,9 +316,9 @@ function downloadContractPdf() {
     document.getElementById('pdfStoreName').innerText = data.storeName;
     document.getElementById('pdfStoreNameTable').innerText = data.storeName;
     
-    const storeAddr = data.storeAddress;
-    const pdfStatusEl = document.getElementById('pdfStoreAddress');
-    if(pdfStatusEl) pdfStatusEl.innerText = storeAddr;
+	if(document.getElementById('pdfStoreAddress')) {
+        document.getElementById('pdfStoreAddress').innerText = data.storeAddress;
+	}
     
     document.getElementById('pdfStartDate').innerText = data.contractStartDate;
     document.getElementById('pdfEndDate').innerText = data.contractEndDate;
@@ -298,7 +327,7 @@ function downloadContractPdf() {
 
     document.getElementById('pdfSignStoreName').innerText = data.storeName;
     document.getElementById('pdfSignOwner').innerText = data.memName;
-    document.getElementById('pdfSignAddress').innerText = storeAddr;
+    document.getElementById('pdfSignAddress').innerText = data.storeAddress;
 
 	const [year, month, day] = data.contractStartDate.split('-');
     document.getElementById('pdfCreatedAt').innerText = `${year}년 ${month}월 ${day}일`;
@@ -346,9 +375,7 @@ function enableEditMode() {
             li.className = "list-group-item d-flex justify-content-between align-items-center";
             li.id = `file-item-${file.fileId}`;
 			
-			let iconClass = "bx bxs-file-blank text-secondary";
-            if (file.fileOriginalName.includes('.pdf')) iconClass = "bx bxs-file-pdf text-danger";
-            else if (file.fileOriginalName.match(/\.(jpg|jpeg|png)$/i)) iconClass = "bx bxs-file-image text-primary";
+			const iconClass = getFileIconClass(file.fileOriginalName);
 
             li.innerHTML = `
                 <div class="d-flex align-items-center overflow-hidden">
@@ -387,16 +414,7 @@ function cancelEditMode() {
 }
 
 function addEditFileField() {
-    const container = document.getElementById('newFileContainer');
-    const div = document.createElement('div');
-    div.className = "input-group mb-2";
-    div.innerHTML = `
-        <input type="file" class="form-control" name="editContractFiles">
-        <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.remove()">
-            <i class="bx bx-minus"></i>
-        </button>
-    `;
-    container.appendChild(div);
+	appendFileField('newFileContainer', 'editContractFiles');
 }
 
 function markFileAsDeleted(fileId) {
@@ -404,9 +422,7 @@ function markFileAsDeleted(fileId) {
         deletedFileIds.push(fileId);
         
         const fileItem = document.getElementById(`file-item-${fileId}`);
-        if(fileItem) {
-            fileItem.classList.add('d-none');
-        }
+        if(fileItem) fileItem.classList.add('d-none');
     }
 }
 
@@ -421,13 +437,7 @@ async function updateContract() {
 	if (!deposit) { alert("여신(보증금)을 입력해주세요."); return; }
 	if (!startDate || !endDate) { alert("계약기간을 입력해주세요."); return; }
 	
-	const startDateForStatus = new Date(startDate);
-	startDateForStatus.setHours(0, 0, 0, 0);
-	const today = new Date();
-	today.setHours(0, 0, 0, 0);
-
-	var status = 1;
-	if (startDateForStatus > today) status = 0;
+	const status = getContractStatusByDate(startDate);
 	
 	const formData = new FormData();
 	
@@ -452,9 +462,9 @@ async function updateContract() {
 	}
 
     try {
-        const response = await fetch('/store/tab/contract/update', { 
+        const response = await fetch('/store/contract/update', { 
             method: 'POST',
-            body: formData,
+            body: formData
         });
 
         if (!response.ok) throw new Error(`서버 오류: ${response.status}`);

@@ -202,7 +202,7 @@ async function submitStoreRegistration() {
     };
 
     try {
-        const response = await fetch('/store/tab/store/add', { 
+        const response = await fetch('/store/add', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', 
@@ -224,7 +224,7 @@ async function submitStoreRegistration() {
             modalInstance.hide();
         }
         
-        loadTab('store');
+        location.reload();
 
     } catch (error) {
         console.error('Error:', error);
