@@ -22,7 +22,7 @@ import com.cafe.erp.member.commute.MemberCommuteService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/member/*")
+@RequestMapping("/member")
 public class MemberController {
 	
 	@Autowired
@@ -40,23 +40,6 @@ public class MemberController {
 		
 	}
 	
-	@PostMapping("login")
-	public String login(@RequestParam("memberId") int memberId, @RequestParam("memPassword") String memPassword,   HttpSession session, Model model)throws Exception{
-		MemberDTO member = memberService.login(memberId);
-		
-		if(member == null || !member.getMemPassword().equals(memPassword)) {
-		
-		return "member/login";}
-		
-		session.setAttribute("login", member);
-		return "member/AM_group_chat";
-	}
-	
-	@GetMapping("/logout")
-	public String logout(HttpSession session) throws Exception {
-		session.invalidate();
-		return "redirect:./login";
-	}
 	
 	@GetMapping("AM_group_chat")
 	public String chatList(Model model)throws Exception{
