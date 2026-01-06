@@ -102,7 +102,7 @@
 							    <input type="hidden" name="page" id="page" value="1">
 							    
 							    <div class="row g-3">
-							        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+							        <div class="col-12 col-lg-3">
 							            <label class="form-label small">불만 유형</label>
 							            <select class="form-select" id="vocType" name="vocType">
 							                <option value="">전체</option>
@@ -112,7 +112,7 @@
 							            </select>
 							        </div>
 							
-							        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+							        <div class="col-12 col-lg-3">
 							            <label class="form-label small">처리 상태</label>
 							            <select class="form-select" id="vocStatus" name="vocStatus">
 							                <option value="">전체</option>
@@ -122,7 +122,7 @@
 							            </select>
 							        </div>
 							
-							        <div class="col-12 col-sm-12 col-md-8 col-lg-3">
+							        <div class="col-12 col-lg-6">
 									    <label class="form-label small">접수 기간</label>
 									    <div class="input-group">
 									        <span class="input-group-text"><i class="bx bx-calendar"></i></span>
@@ -133,17 +133,23 @@
 									    <input type="hidden" id="searchEndDate" name="searchEndDate" value="${pager.searchEndDate}" />
 									</div>
 							
-							        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+							        <div class="col-12 col-lg-3">
 							            <label class="form-label small">가맹점명</label>
-							            <input type="text" class="form-control" placeholder="가맹점명" id="storeName" name="storeName" value="${pager.storeName}" />
+							            <div class="input-group">
+					                    	<span class="input-group-text"><i class="bx bx-store"></i></span>
+					                        <input type="text" class="form-control" placeholder="가맹점명" id="storeName" name="storeName" value="${pager.storeName}" />
+					                    </div>
 							        </div>
 							
-							        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+							        <div class="col-12 col-lg-6">
 							            <label class="form-label small">제목</label>
-							            <input type="text" class="form-control" placeholder="제목 검색" id="vocTitle" name="vocTitle" value="${pager.vocTitle}" />
+							            <div class="input-group">
+							            	<span class="input-group-text"><i class='bx bx-detail'></i></span>
+								            <input type="text" class="form-control" placeholder="제목 검색" id="vocTitle" name="vocTitle" value="${pager.vocTitle}" />
+							            </div>
 							        </div>
 							
-							        <div class="col-12 d-flex align-items-end justify-content-end gap-2">
+							        <div class="col-12 col-lg-3 d-flex align-items-end justify-content-end gap-2">
 							            <button class="btn btn-outline-secondary text-nowrap" type="button" onclick="resetSearchForm()"> 
 							                <i class="bx bx-refresh"></i> 초기화
 							            </button>

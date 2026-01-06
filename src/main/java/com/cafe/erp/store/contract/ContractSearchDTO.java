@@ -1,0 +1,29 @@
+package com.cafe.erp.store.contract;
+
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.cafe.erp.util.Pager;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class ContractSearchDTO extends Pager {
+
+	private Integer searchContractStatus;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate searchStartDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate searchEndDate;
+	private String searchStoreName;
+	private Integer searchRoyaltyMin;
+	private Integer searchRoyaltyMax;
+	private Integer searchDepositMin;
+	private Integer searchDepositMax;
+	
+}

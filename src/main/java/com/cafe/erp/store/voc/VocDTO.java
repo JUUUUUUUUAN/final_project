@@ -25,11 +25,11 @@ public class VocDTO {
 	
 	// member table column
 	private String memName; // 작성자 이름
+	private String ownerName; // 점주 이름
 	
 	// store table column 
 	private String storeName;
 	private Integer ownerId;
-	private String ownerName;
 	private String storeAddress;
 	
 	public String getVocStatusStr() {

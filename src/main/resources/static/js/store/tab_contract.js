@@ -4,23 +4,6 @@ var deletedFileIds = [];
 var isContractUpdated = false;
 
 document.addEventListener("DOMContentLoaded", function() {
-    const monthInput = document.getElementById("searchStartMonthFrom");
-    if (monthInput) {
-        flatpickr(monthInput, {
-            locale: "ko", 
-            plugins: [
-                new monthSelectPlugin({
-                    shorthand: true, 
-                    dateFormat: "Y-m", 
-                    altFormat: "Y년 F", 
-                    theme: "light"
-                })
-            ],
-            allowInput: false, 
-            disableMobile: "true" 
-        });
-    }
-	
 	const detailModal = document.getElementById('detailContractModal');
     if (detailModal) {
         detailModal.addEventListener('hidden.bs.modal', function () {
@@ -479,4 +462,32 @@ async function updateContract() {
         console.error("수정 실패:", error);
         alert("정보 수정 중 오류가 발생했습니다.");
     }
+}
+
+function searchVoc() {
+    document.getElementById("page").value = 1;
+    document.getElementById("contractSearchForm").submit();
+}
+
+function resetSearchForm() {
+	const inputs = document.querySelectorAll('#contractSearchForm input');
+    inputs.forEach(input => input.value = '');
+	
+	const selects = document.querySelectorAll('#contractSearchForm select');
+    selects.forEach(select => select.selectedIndex = 0);
+
+    if(document.getElementById('page')) {
+        document.getElementById('page').value = 1;
+    }
+}
+
+function movePage(page) {
+    if (page < 1) page = 1;
+    document.getElementById("page").value = page;
+    document.getElementById("contractSearchForm").submit();
+}
+
+function downloadExcel() {
+	var searchParams = $('#contractSearchForm').serialize();
+	location.href='/store/contract/downloadExcel?' + searchParams;
 }

@@ -120,15 +120,21 @@
 										<label class="form-label small">종료 시간</label>
 							            <input type="time" class="form-control" id="filterCloseTime" name="storeCloseTime" value="${pager.storeCloseTime}" />
 							        </div>
-									<div class="col-12 col-sm-6 col-md-4 col-lg-2">
+									<div class="col-12 col-sm-6 col-md-4 col-lg-3">
 										<label class="form-label small">주소 (지역)</label>
-										<input type="text" class="form-control" placeholder="예: 서울 강남구" id="filterAddress" name="storeAddress" value="${pager.storeAddress}" />
+										<div class="input-group">
+					                    	<span class="input-group-text"><i class='bx bx-map'></i></span>
+					                    	<input type="text" class="form-control" placeholder="예: 서울 강남구" id="filterAddress" name="storeAddress" value="${pager.storeAddress}" />
+					                    </div>
 									</div>
-							        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+							        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
 							            <label class="form-label small">가맹점명</label>
-							            <input type="text" class="form-control" placeholder="가맹점명" id="filterKeyword" name="storeName" value="${pager.storeName}" />
+							        	<div class="input-group">
+					                    	<span class="input-group-text"><i class="bx bx-store"></i></span>
+					                        <input type="text" class="form-control" placeholder="가맹점명" id="filterKeyword" name="storeName" value="${pager.storeName}" />
+					                    </div>
 							        </div>
-							        <div class="col-12 col-sm-6 col-md-4 col-lg-2 d-flex align-items-end justify-content-end gap-2 ps-md-5">
+							        <div class="col-12 d-flex align-items-end justify-content-end gap-2 mt-4">
 										<button class="btn btn-outline-secondary text-nowrap" type="button" onclick="resetSearchForm()"><i class="bx bx-refresh"></i> 초기화</button>
 							            <button class="btn btn-primary text-nowrap" onclick="searchStores()">
 							            	<i class="bx bx-search me-1"></i> 조회
@@ -193,7 +199,6 @@
 					        <nav aria-label="Page navigation">
 					            <ul class="pagination">
 					                <li class="page-item ${pager.begin == 1 ? 'disabled' : ''}"><a class="page-link" href="javascript:movePage(${pager.begin - 1})"><i class="bx bx-chevron-left"></i></a></li>
-					                <!-- <li class="page-item active"><a class="page-link" href="#">1</a></li> -->
 					                <c:forEach begin="${pager.begin}" end="${pager.end}" var="i">
 									    <li class="page-item ${pager.page == i ? 'active' : ''}"><a class="page-link" href="javascript:movePage(${i})">${i}</a></li>
 							  		</c:forEach>
@@ -220,7 +225,7 @@
 		                        <div class="row g-3">
 		                            <div class="col-md-6">
 		                                <label class="form-label" for="storeName">가맹점명 <span class="text-danger">*</span></label>
-		                                <div class="input-group input-group-merge">
+		                                <div class="input-group">
 		                                    <span class="input-group-text"><i class="bx bx-store"></i></span>
 		                                    <input type="text" id="storeName" name="storeName" class="form-control" placeholder="가맹점 이름 입력" required />
 		                                </div>
