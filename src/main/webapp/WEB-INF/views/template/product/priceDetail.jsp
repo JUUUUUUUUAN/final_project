@@ -1,6 +1,6 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
 
 <html
   lang="en"
@@ -44,8 +44,6 @@
     <link rel="stylesheet" href="/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <link rel="stylesheet" href="/vendor/libs/apex-charts/apex-charts.css" />
-    
-    <link rel="stylesheet" href="/css/store/main.css">
 
     <!-- Page CSS -->
 
@@ -55,10 +53,6 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="/js/config.js"></script>
-    
-    <!-- kakao -->
-	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoKey}&libraries=services"></script>
   </head>
 
   <body>
@@ -71,43 +65,96 @@
 
         <!-- Layout container -->
         <div class="layout-page">
-		<c:import url="/WEB-INF/views/template/header.jsp"></c:import>
-        
           <!-- Content wrapper -->
           <div class="content-wrapper">
-            <!-- Content -->
-
+            
+            <!-- Content -->	
             <div class="container-xxl flex-grow-1 container-p-y">
               <div class="row">
-              
-			    <div class="col-12">
-                    <ul class="nav nav-pills-custom" role="tablist">
-                        <li class="nav-item">
-                            <button type="button" class="nav-link active" id="btn-store" onclick="loadTab('store', this)">
-                                <i class="bx bx-store me-1"></i> 가맹점 정보 </button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="nav-link" id="btn-contract" onclick="loadTab('contract', this)">
-                                <i class="bx bx-file me-1"></i> 계약 기록 </button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="nav-link" id="btn-evaluation" onclick="loadTab('evaluation', this)">
-                                <i class="bx bx-clipboard me-1"></i> 평가 현황 </button>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div id="tab-content-area">
-                    <div class="text-center py-5">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-			  	
-	          </div>
-			  	
-     
+				<div class="card">
+				  <h5 class="card-header">원재료 목록</h5>
+				  <div class="table-responsive text-nowrap">
+				    <table class="table">
+				      <thead>
+				        <tr>
+				          <th>물품코드</th>
+				          <th>물품명</th>
+				          <th>카테고리</th>
+				          <th>단가</th>
+				          <th>등록자</th>
+				          <th>사용여부</th>
+				        </tr>
+				      </thead>
+				      <tbody>
+				        <%-- <c:forEach var="item" items="${itemList}">
+				          <tr>
+				            <td>${item.}</td>
+				            <td>${item.}</td>
+				            <td>${item.price}</td>
+				            <td>${item.useYn}</td>
+				            <td>
+				              <button class="btn btn-sm btn-warning"
+				                data-bs-toggle="modal"
+				                data-bs-target="#editModal"
+				                onclick="setEditData('${item.id}','${item.itemName}','${item.price}','${item.useYn}')">
+				                수정
+				              </button>
+				            </td>
+				          </tr>
+				        </c:forEach> --%>
+				        <tr>
+				            <td>am0012</td>
+				            <td>콜롬비아 원두 5kg</td>
+				            <td>
+			                	<span class="badge bg-label-warning">식품</span>
+			                </td>
+				            <td>5,000원</td>
+				            <td>1122333</td>
+				            <td>
+			                	<span class="badge bg-label-danger">미사용</span>
+			                </td>
+				          </tr>
+				          <tr>
+				            <td>am0012</td>
+				            <td>콜롬비아 원두 5kg</td>
+				            <td>
+			                	<span class="badge bg-label-warning">식품</span>
+			                </td>
+				            <td>10,000원</td>
+				            <td>1122333</td>
+				            <td>
+			                	<span class="badge bg-label-success">사용</span>
+			                </td>
+				          </tr>
+				          <tr>
+				            <td>am0014</td>
+				            <td>인도네이사 원두 5kg</td>
+				            <td>
+			                	<span class="badge bg-label-warning">식품</span>
+			                </td>
+				            <td>15,000원</td>
+				            <td>1122333</td>
+				            <td>
+			                	<span class="badge bg-label-success">사용</span>
+			                </td>
+				          </tr>
+				          <tr>
+				            <td>am0018</td>
+				            <td>커피머신</td>
+				            <td>
+			                	<span class="badge bg-label-dark">비식품</span>
+			                </td>
+				            <td>115,000원</td>
+				            <td>1122333</td>
+				            <td>
+			                	<span class="badge bg-label-success">사용</span>
+			                </td>
+				          </tr>
+				      </tbody>
+				    </table>
+				  </div>
+				</div>
+              </div>
             </div>
             <!-- / Content -->
 
@@ -126,7 +173,6 @@
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
-    
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
@@ -149,7 +195,5 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    
-    <script type="text/javascript" src="/js/store/main.js"></script>
   </body>
 </html>

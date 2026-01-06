@@ -24,9 +24,15 @@ public class MemberDTO {
 	private Date memLeftDate;
 	private Boolean memIsActive;
 	private int deptCode;
-    private int positionCode;
+	private int positionCode;
     
-    
-    private int idPrefix;
+	private int idPrefix;
+	
+	private String memDeptName;
+	private String memPositionName;
+	
+	private String memProfileSavedName;
+	private String memProfileOriginalName;
+
     
 }

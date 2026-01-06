@@ -74,7 +74,6 @@
     <li class="menu-item active">
       <a href="/" class="menu-link">
         <i class="menu-icon tf-icons bx bx-home-circle"></i>
-        <div data-i18n="Analytics">HOME</div>
       </a>
     </li>
 
@@ -90,6 +89,7 @@
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
+<<<<<<< HEAD
           <a href="/item/add" class="menu-link">
             <div data-i18n="Account">물품 등록</div>
           </a>
@@ -102,6 +102,20 @@
         <li class="menu-item">
           <a href="/item/priceDetail" class="menu-link">
             <div data-i18n="Notifications">물품 단가</div>
+=======
+          <a href="/product/add" class="menu-link">
+            <div data-i18n="Account">물품등록</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="/product/list" class="menu-link">
+            <div data-i18n="Notifications">물품검색</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="/product/priceDetail" class="menu-link">
+            <div data-i18n="Notifications">단가조회</div>
+>>>>>>> _test
           </a>
         </li>
       </ul>
@@ -115,12 +129,20 @@
       <ul class="menu-sub">
         <li class="menu-item">
           <a href="/vendor/add" class="menu-link">
+<<<<<<< HEAD
             <div data-i18n="Notifications">거래처 등록</div>
+=======
+            <div data-i18n="Notifications">거래처등록</div>
+>>>>>>> _test
           </a>
         </li>
         <li class="menu-item">
           <a href="/vendor/list" class="menu-link">
+<<<<<<< HEAD
             <div data-i18n="Notifications">거래처 검색</div>
+=======
+            <div data-i18n="Notifications">거래처조회</div>
+>>>>>>> _test
           </a>
         </li>
       </ul>
@@ -129,7 +151,7 @@
     <li class="menu-item">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-        <div data-i18n="Misc">Order</div>
+        <div data-i18n="Misc">발주</div>
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
@@ -187,6 +209,7 @@
     <li class="menu-item">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+		<!-- <i class='menu-icon bx  bx-package'></i> -->
         <div data-i18n="Misc">Stock</div>
       </a>
     </li>
@@ -200,12 +223,10 @@
     <li class="menu-item">
       <a href="javascript:void(0)" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-collection"></i>
-        <div data-i18n="Basic">Cards</div>
       </a>
       <ul class="menu-sub">
        <li class="menu-item">
          <a href="extended-ui-perfect-scrollbar.html" class="menu-link">
-           <div data-i18n="Perfect Scrollbar">Perfect scrollbar</div>
          </a>
        </li>
        <li class="menu-item">
@@ -261,12 +282,12 @@
     <li class="menu-item">
       <a href="javascript:void(0)" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-collection"></i>
-        <div data-i18n="Basic">Cards</div>
+        <div data-i18n="Basic">Receivable</div>
       </a>
       <ul class="menu-sub">
        <li class="menu-item">
-         <a href="extended-ui-perfect-scrollbar.html" class="menu-link">
-           <div data-i18n="Perfect Scrollbar">Perfect scrollbar</div>
+         <a href="/receivable/receivable" class="menu-link">
+           <div data-i18n="Perfect Scrollbar">Receivable List</div>
          </a>
        </li>
        <li class="menu-item">

@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page import="java.time.LocalDate" %>
-
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <html
   lang="ko"
   class="light-style layout-menu-fixed"
@@ -81,7 +81,13 @@
 
               <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">사원 목록 (총 124명)</h5>
+                    <div class="mb-3">
+                    	<h5>현재 사원 수: ${activeCount}명</h5>
+                    	<div>
+						    <span>(재직원: ${totalCount}명 | </span>
+						    <span>퇴사자: ${totalCount - activeCount}명)</span>
+                    	</div>
+					</div>
                     <div>
                         <button type="button" class="btn btn-outline-success me-2">
                             <i class='bx bx-download me-1'></i> 엑셀 다운로드
@@ -109,8 +115,8 @@
                     
                     	<c:forEach items="${list}" var="member">
 		                    <tr>
-        	                	<td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>${member.memberId}</strong></td>
-            	            	<td><a href="./detail?empId=102401" class="fw-bold text-body">${member.memName}</a></td>
+        	                	<td><i class="fab fa-angular fa-lg text-danger me-3"></i>${member.memberId}</td>
+            	            	<td><a href="./AM_member_detail?memberId=${member.memberId}"><span class="fw-bold text-primary"> ${member.memName}</span> </a></td>
             	            	<td>
 	            	            	<c:choose>
     	        	            		<c:when test="${member.deptCode == 10}">
@@ -195,7 +201,7 @@
 
 								        <c:otherwise>
 								            <span class="badge bg-label-dark">
-								                퇴사
+								                퇴직
 								            </span>
 								        </c:otherwise>
 								    </c:choose>
@@ -379,7 +385,7 @@
     
     <script>
         function previewEmpId() {
-            const deptSelect = document.getElementById("memDeptCode");
+            const deptSelect = document.getElementById("deptCode");
             const previewInput = document.getElementById("previewIdInput");
             const hiddenPrefix = document.getElementById("idPrefix");
             

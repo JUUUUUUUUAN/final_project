@@ -7,7 +7,7 @@
 
 .nav-pills-custom .nav-link {
     border: none;
-    border-radius: 30px;
+    border-radius: 0.375rem  ;
     padding: 10px 24px;
     color: #697a8d; /* 기본 회색 텍스트 */
     background-color: transparent;
@@ -33,6 +33,26 @@
     color: #566a7f;
 }
 
+/* 테이블 정렬 스타일 */
+.sortable { 
+	cursor: pointer; 
+	user-select: none; 
+	position: relative; 
+}
+.sortable:hover { 
+	background-color: #f0f2f4; 
+	color: #696cff; 
+}
+
+.sort-icon { 
+	font-size: 0.9em; 
+	margin-left: 5px; 
+	color: #969696; 
+}
+.sort-active { 
+	color: #696cff;
+} 
+
 /* 콘텐츠 영역 스타일 */
 #tab-content-area {
     min-height: 600px;
@@ -40,4 +60,8 @@
     border-radius: 10px;
     padding: 24px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+#detailStatusArea {
+	border: 1px solid #d9dee3;
 }
