@@ -25,8 +25,12 @@ public class ContractService {
 	private String uploadPath;
 	
 	@Transactional(readOnly = true)
-	public List<ContractDTO> list() throws Exception {
-		return contractDAO.list();
+	public List<ContractDTO> list(ContractSearchDTO searchDTO) throws Exception {
+		Long totalCount = contractDAO.count(searchDTO);
+		
+		searchDTO.pageing(totalCount);
+		
+		return contractDAO.list(searchDTO);
 	}
 
 	public int add(ContractDTO contractDTO, List<MultipartFile> files) throws Exception {
@@ -51,7 +55,7 @@ public class ContractService {
 		return result;
 	}
 
-	public ContractDTO getDetail(String contractId) {
+	public ContractDTO getDetail(String contractId) throws Exception {
 		return contractDAO.getDetail(contractId);
 	}
 
@@ -97,6 +101,10 @@ public class ContractService {
 				contractDAO.deleteFile(fileId);
 			}
 		}
+	}
+
+	public List<ContractDTO> excelList(ContractSearchDTO searchDTO) throws Exception {
+		return contractDAO.excelList(searchDTO);
 	}
 
 }

@@ -5,7 +5,43 @@
     
 <mapper namespace="com.cafe.erp.store.contract.ContractDAO">
 
-	<select id="list" resultType="ContractDTO">
+	<sql id="searchCondition">
+        <where>
+            <if test="searchContractStatus != null">
+                AND sc.contract_status = #{searchContractStatus}
+            </if>
+            
+            <if test="searchStartDate != null">
+	            AND sc.contract_start_date >= #{searchStartDate}
+	        </if>
+	        
+	        <if test="searchEndDate != null">
+	            AND sc.contract_end_date &lt;= #{searchEndDate}
+	        </if>
+	        
+	        <if test="searchStoreName != null and searchStoreName != ''">
+                AND s.store_name LIKE CONCAT('%', #{searchStoreName}, '%')
+            </if>
+	
+	        <if test="searchRoyaltyMin != null">
+                AND sc.contract_royalti >= #{searchRoyaltyMin}
+            </if>
+            
+            <if test="searchRoyaltyMax != null">
+                AND sc.contract_royalti &lt;= #{searchRoyaltyMax}
+            </if>
+            
+            <if test="searchDepositMin != null">
+                AND sc.contract_deposit >= #{searchDepositMin}
+            </if>
+            
+            <if test="searchDepositMax != null">
+                AND sc.contract_deposit &lt;= #{searchDepositMax}
+            </if>
+    	</where>
+    </sql>
+
+	<select id="list" parameterType="ContractSearchDTO" resultType="ContractDTO">
 		SELECT 
             sc.contract_id,
             sc.store_id,          
@@ -19,9 +55,10 @@
             s.store_name
         FROM 
             store_contract sc             
-            INNER JOIN store s                
-            ON sc.store_id = s.store_id 
-            ORDER BY sc.contract_id DESC
+            INNER JOIN store s ON sc.store_id = s.store_id 
+        <include refid="searchCondition" />
+        ORDER BY sc.contract_id DESC
+        LIMIT #{startNum}, #{perPage}
 	</select>
 	
 	<select id="maxContractId" parameterType="String" resultType="String">
@@ -108,5 +145,35 @@
 	<delete id="deleteFile" parameterType="Integer">
 		DELETE FROM store_contract_file WHERE file_id = #{fileId}
 	</delete>
+	
+	<select id="count" parameterType="ContractSearchDTO" resultType="Long">
+		SELECT COUNT(contract_id) 
+		FROM store_contract sc
+		INNER JOIN store s ON sc.store_id = s.store_id
+		<include refid="searchCondition" />
+	</select>
+	
+	<select id="excelList" parameterType="ContractSearchDTO" resultType="ContractDTO">
+		SELECT 
+            sc.contract_id,
+            sc.store_id,          
+            sc.contract_royalti,
+            sc.contract_deposit,
+            sc.contract_start_date,
+            sc.contract_end_date,
+            sc.contract_status,
+            sc.contract_created_at,
+            sc.contract_updated_at,
+            s.store_name,
+            s.member_id,
+		    m.mem_name,
+		    s.store_address
+        FROM 
+            store_contract sc             
+            INNER JOIN store s ON sc.store_id = s.store_id 
+            LEFT JOIN member m ON s.member_id = m.member_id
+        <include refid="searchCondition" />
+        ORDER BY sc.contract_id DESC
+	</select>
 	
 </mapper>

@@ -243,18 +243,18 @@ function resetSearchForm() {
 	const form = document.getElementById('storeSearchForm');
 	
 	const inputs = form.querySelectorAll('input[type="text"], input[type="time"]');
-	    inputs.forEach(input => {
-	        input.value = '';
-	    });
+    inputs.forEach(input => {
+        input.value = '';
+    });
 
-	    const selects = form.querySelectorAll('select');
-	    selects.forEach(select => {
-	        select.value = ''; 
-	    });
+    const selects = form.querySelectorAll('select');
+    selects.forEach(select => {
+        select.value = ''; 
+    });
 
-	    if(document.getElementById('page')) {
-	        document.getElementById('page').value = 1;
-	    }
+    if(document.getElementById('page')) {
+        document.getElementById('page').value = 1;
+    }
 }
 
 function downloadExcel() {

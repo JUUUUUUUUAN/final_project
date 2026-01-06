@@ -17,7 +17,7 @@ public class ContractScheduler {
 	
 	@Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
 	@Transactional
-	public void updateStatus() {
+	public void updateStatus() throws Exception {
 		LocalDate today = LocalDate.now();
 		LocalDate yesterday = today.minusDays(1);
 		

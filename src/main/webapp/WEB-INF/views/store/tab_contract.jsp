@@ -95,64 +95,81 @@
                         </li>
                     </ul>
                 </div>
-                
+                <h4 class="fw-bold py-3 mb-3"><span class="text-muted fw-normal">가맹점 /</span> 계약 목록</h4>
                 <div id="tab-content-area">
         		    <div class="card shadow-none border bg-white mb-4">
 				        <div class="card-body py-4 px-4">
-				            <form id="contractSearchForm" onsubmit="return false;">
-				                <div class="row g-3 align-items-end">
-				                
-					                <div class="col-12 col-lg-2">
+				            <form id="contractSearchForm" method="get" action="/store/contract/list">
+				            	<input type="hidden" name="page" id="page" value="1">
+				                <div class="row g-3">
+					                <div class="col-12 col-md-3 col-lg-3">
 					                    <label class="form-label small">계약 상태</label>
-					                    <select class="form-select" id="searchContractStatus">
+					                    <select class="form-select" id="searchContractStatus" name="searchContractStatus">
 					                        <option value="">전체</option>
-					                        <option value="PENDING">대기 (PENDING)</option>
-					                        <option value="ACTIVE">유효 (Active)</option>
-					                        <option value="EXPIRED">만료 (Expired)</option>
+					                        <option value="0" ${pager.searchContractStatus eq 0 ? 'selected' : ''}>대기 (PENDING)</option>
+					                        <option value="1" ${pager.searchContractStatus eq 1 ? 'selected' : ''}>유효 (Active)</option>
+					                        <option value="2" ${pager.searchContractStatus eq 2 ? 'selected' : ''}>만료 (Expired)</option>
 					                    </select>
 					                </div>
-				
-					                <div class="col-12 col-lg-2">
-					                    <label class="form-label small">계약 시작월</label>
+					                
+					                <div class="col-12 col-md-9 col-lg-5">
+									    <label class="form-label small">계약 기간</label>
+									    <div class="input-group">
+									        <input type="date" class="form-control" id="searchStartDate" name="searchStartDate" 
+									               value="${pager.searchStartDate}" placeholder="시작일" title="검색 시작일">
+									        
+									        <span class="input-group-text px-2">~</span>
+									        
+									        <input type="date" class="form-control" id="searchEndDate" name="searchEndDate" 
+									               value="${pager.searchEndDate}" placeholder="종료일" title="검색 종료일">
+									    </div>
+									</div>
+									
+									<div class="col-12 col-md-12 col-lg-4">
+					                    <label class="form-label small">가맹점명</label>
 					                    <div class="input-group">
-					                        <span class="input-group-text"><i class="bx bx-calendar"></i></span>
-					                        <input type="text" class="form-control bg-white" id="searchStartMonthFrom" placeholder="시작월을 선택하세요" readonly />
+					                    	<span class="input-group-text"><i class="bx bx-store"></i></span>
+					                        <input type="text" class="form-control" placeholder="가맹점명" id="searchStoreName" name="searchStoreName" value="${pager.searchStoreName}" />
 					                    </div>
 					                </div>
 					                
-					                <div class="col-12 col-lg-2">
-					                    <label class="form-label small">계약 종료월</label>
-					                    <div class="input-group">
-					                        <span class="input-group-text"><i class="bx bx-calendar"></i></span>
-					                        <input type="text" class="form-control bg-white" id="searchEndMonthFrom" placeholder="시작월을 선택하세요" readonly />
-					                    </div>
-					                </div>
-					
-					                <div class="col-12 col-lg-2">
-					                    <label class="form-label small">가맹점명</label>
-					                    <div class="input-group input-group-merge">
-					                        <span class="input-group-text"><i class="bx bx-search"></i></span>
-					                        <input type="text" class="form-control" placeholder="가맹점명" id="searchStoreName" />
-					                    </div>
-					                </div>
+					                <div class="col-12 col-md-6 col-lg-6">
+							            <label class="form-label small">로열티</label>
+							            <div class="input-group">
+							            	<span class="input-group-text">₩</span>
+							                <input type="number" class="form-control" placeholder="최소" id="searchRoyaltyMin" name="searchRoyaltyMin" value="${pager.searchRoyaltyMin}" >
+							                <span class="input-group-text px-2">~</span>
+							                <input type="number" class="form-control" placeholder="최대" id="searchRoyaltyMax" name="searchRoyaltyMax" value="${pager.searchRoyaltyMax}" >
+							                <span class="input-group-text">원</span>
+							            </div>
+							        </div>
+									
+									<div class="col-12 col-md-6 col-lg-6">
+							            <label class="form-label small">여신(보증금)</label>
+							            <div class="input-group">
+							            	<span class="input-group-text">₩</span>
+							                <input type="number" class="form-control" placeholder="최소" id="searchDepositMin" name="searchDepositMin" value="${pager.searchDepositMin}" > 
+							                <span class="input-group-text px-2">~</span>
+							                <input type="number" class="form-control" placeholder="최대" id="searchDepositMax" name="searchDepositMax" value="${pager.searchDepositMax}" >
+							                <span class="input-group-text">원</span>
+							            </div>
+							        </div>
 				
-				                    <div class="col-12 col-lg-3 d-flex justify-content-end gap-2 ps-md-5">
-				                        <button class="btn btn-outline-secondary flex-grow-1 text-nowrap" type="reset"><i class="bx bx-refresh"></i> 초기화</button>
-				                        <button class="btn btn-primary flex-grow-1 text-nowrap" onclick="searchContract()"><i class="bx bx-search"></i> 조회</button>
+				                    <div class="col-12 col-md-12 d-flex align-items-end justify-content-end gap-2 mt-5">
+				                        <button class="btn btn-outline-secondary text-nowrap" type="button" onclick="resetSearchForm()"><i class="bx bx-refresh"></i> 초기화</button>
+				                        <button class="btn btn-primary text-nowrap" onclick="searchContract()"><i class="bx bx-search"></i> 조회</button>
 				                    </div>
 				                </div>
 				            </form>
 				        </div>
 				    </div>
 					
-				
-					        
 					<div class="card shadow-none border bg-white">
 					     	
 						<div class="card-header d-flex justify-content-between align-items-center">
 					    	<h5 class="mb-0">가맹점 계약 목록</h5>
 					        <div>
-					       		<button type="button" class="btn btn-outline-success me-2">
+					       		<button type="button" class="btn btn-outline-success me-2" onclick="downloadExcel()">
 					            	<i class='bx bx-download me-1'></i> 엑셀 다운로드
 					            </button>
 					          	<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerContractModal">
@@ -219,10 +236,11 @@
 					    <div class="card-footer d-flex justify-content-center">
 					        <nav aria-label="Page navigation">
 					            <ul class="pagination">
-					                <li class="page-item prev"><a class="page-link" href="#"><i class="bx bx-chevron-left"></i></a></li>
-					                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-					                <li class="page-item"><a class="page-link" href="#">2</a></li>
-					                <li class="page-item next"><a class="page-link" href="#"><i class="bx bx-chevron-right"></i></a></li>
+					            	<li class="page-item ${pager.begin == 1 ? 'disabled' : ''}"><a class="page-link" href="javascript:movePage(${pager.begin - 1})"><i class="bx bx-chevron-left"></i></a></li>
+					                <c:forEach begin="${pager.begin}" end="${pager.end}" var="i">
+									    <li class="page-item ${pager.page == i ? 'active' : ''}"><a class="page-link" href="javascript:movePage(${i})">${i}</a></li>
+							  		</c:forEach>
+					                <li class="page-item next"><a class="page-link" href="javascript:movePage(${pager.end + 1})"><i class="bx bx-chevron-right"></i></a></li>
 					            </ul>
 					        </nav>
 					    </div>
@@ -584,7 +602,7 @@
 
     <!-- Vendors JS -->
     <script src="/vendor/libs/apex-charts/apexcharts.js"></script>
-
+    
     <!-- Main JS -->
     <script src="/js/main.js"></script>
 
@@ -593,10 +611,6 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
     
     <script type="text/javascript" src="/js/store/tab_contract.js"></script>
   </body>

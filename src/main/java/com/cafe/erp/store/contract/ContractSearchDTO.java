@@ -1,4 +1,4 @@
-package com.cafe.erp.store.voc;
+package com.cafe.erp.store.contract;
 
 import java.time.LocalDate;
 
@@ -10,18 +10,20 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Setter
 @Getter
+@Setter
 @ToString
-public class VocSearchDTO extends Pager {
-	
-	private String vocType;
-	private Integer vocStatus;
+public class ContractSearchDTO extends Pager {
+
+	private Integer searchContractStatus;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate searchStartDate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate searchEndDate;
-	private String storeName;
-	private String vocTitle;
-
+	private String searchStoreName;
+	private Integer searchRoyaltyMin;
+	private Integer searchRoyaltyMax;
+	private Integer searchDepositMin;
+	private Integer searchDepositMax;
+	
 }
