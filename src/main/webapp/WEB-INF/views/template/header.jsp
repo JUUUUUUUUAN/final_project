@@ -79,7 +79,7 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
           <li>
-            <a class="dropdown-item" href="./logout">로그아웃</a>
+            <a class="dropdown-item" href="/member/logout">로그아웃</a>
           </li>
         </ul>
       </li>
@@ -87,5 +87,5 @@
     </ul>
   </div>
 </nav>
-
+<script src="/vendor/libs/jquery/jquery.js"></script>
 <script type="text/javascript" src="/js/member/header.js"></script>
