@@ -1,20 +1,15 @@
 $(function() {
-    // 1. JSP에서 값 가져오기
-    let startParam = '${pager.startDate}'.trim(); 
-    let endParam = '${pager.endDate}'.trim();
+    let startParam = '${pager.searchStartDate}'.trim(); 
+    let endParam = '${pager.searchEndDate}'.trim();
 
-    // 2. 초기 날짜 설정 로직
-    // 기본값은 '오늘'로 설정 (달력을 열었을 때 보여질 기준 날짜)
     let startMoment = moment();
     let endMoment = moment();
-    let hasValidData = false; // 데이터가 실제로 있는지 확인하는 플래그
+    let hasValidData = false; 
 
-    // 값이 있고 형식이 올바른지 체크
     if (startParam && endParam) {
         let s = moment(startParam, 'YYYY-MM-DD');
         let e = moment(endParam, 'YYYY-MM-DD');
         
-        // 두 날짜가 모두 유효한 날짜(Invalid Date가 아님)라면 적용
         if (s.isValid() && e.isValid()) {
             startMoment = s;
             endMoment = e;
@@ -22,11 +17,10 @@ $(function() {
         }
     }
 
-    // 3. DateRangePicker 초기화
     $('#daterange').daterangepicker({
-        startDate: startMoment, // 데이터가 없으면 '오늘', 있으면 '그 날짜'부터 시작
+        startDate: startMoment,
         endDate: endMoment,
-        autoUpdateInput: false, // [핵심] 날짜 선택 전까지 input을 자동으로 채우지 않음
+        autoUpdateInput: false, 
         locale: {
             format: "YYYY-MM-DD",
             separator: " ~ ",
@@ -41,34 +35,26 @@ $(function() {
         }
     });
 
-    // 4. 화면 초기값 설정 (가장 중요한 부분)
     if (hasValidData) {
-        // 데이터가 있을 때만 input에 글자를 채워줌
         $('#daterange').val(startMoment.format('YYYY-MM-DD') + ' ~ ' + endMoment.format('YYYY-MM-DD'));
     } else {
-        // 데이터가 없으면 빈 값으로 둠 -> HTML의 placeholder="기간을 선택하세요"가 보임
         $('#daterange').val(''); 
     }
 
-    // 5. [확인] 버튼 눌렀을 때 이벤트
     $('#daterange').on('apply.daterangepicker', function(ev, picker) {
         const sDate = picker.startDate.format('YYYY-MM-DD');
         const eDate = picker.endDate.format('YYYY-MM-DD');
 
-        // 보이는 input 채우기
         $(this).val(sDate + ' ~ ' + eDate);
         
-        // 숨겨진 form input 채우기 (서버 전송용)
-        $('#startDate').val(sDate);
-        $('#endDate').val(eDate);
+        $('#searchStartDate').val(sDate);
+        $('#searchEndDate').val(eDate);
     });
 
-    // 6. [취소] 버튼 눌렀을 때 이벤트
     $('#daterange').on('cancel.daterangepicker', function(ev, picker) {
-        // 값을 싹 비움 -> 다시 placeholder가 보임
         $(this).val('');
-        $('#startDate').val('');
-        $('#endDate').val('');
+        $('#searchStartDate').val('');
+        $('#searchEndDate').val('');
     });
 });
 
@@ -243,24 +229,18 @@ function searchVoc() {
 }
 
 function resetSearchForm() {
-	const form = document.getElementById('storeSearchForm');
+	const inputs = document.querySelectorAll('#vocSearchForm input');
+    inputs.forEach(input => input.value = '');
 	
-	const inputs = form.querySelectorAll('input[type="text"], input[type="time"]');
-	    inputs.forEach(input => {
-	        input.value = '';
-	    });
+	const selects = document.querySelectorAll('#vocSearchForm select');
+    selects.forEach(select => select.selectedIndex = 0);
 
-	    const selects = form.querySelectorAll('select');
-	    selects.forEach(select => {
-	        select.value = ''; 
-	    });
-
-	    if(document.getElementById('page')) {
-	        document.getElementById('page').value = 1;
-	    }
+    if(document.getElementById('page')) {
+        document.getElementById('page').value = 1;
+    }
 }
 
 function downloadExcel() {
-	var searchParams = $('#storeSearchForm').serialize();
-	location.href='/store/downloadExcel?' + searchParams;
+	var searchParams = $('#vocSearchForm').serialize();
+	location.href='/store/voc/downloadExcel?' + searchParams;
 }

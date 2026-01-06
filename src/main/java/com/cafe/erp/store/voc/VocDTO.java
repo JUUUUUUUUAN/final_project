@@ -28,13 +28,31 @@ public class VocDTO {
 	
 	// store table column 
 	private String storeName;
+	private Integer ownerId;
 	private String ownerName;
 	private String storeAddress;
+	
+	public String getVocStatusStr() {
+        if (this.vocStatus == null) return "";
+
+        switch (this.vocStatus) {
+            case 0: return "처리 대기";
+            case 1: return "처리 중";
+            case 2: return "처리 완료";
+            default: return String.valueOf(this.vocStatus);
+        }
+    }
 	
 	public String getVocCreatedAtStr() {
         if (this.vocCreatedAt == null) return "";
         
         return this.vocCreatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+	
+	public String getVocUpdatedAtStr() {
+        if (this.vocUpdatedAt == null) return "";
+        
+        return this.vocUpdatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 }

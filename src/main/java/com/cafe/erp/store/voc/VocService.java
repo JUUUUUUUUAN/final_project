@@ -37,4 +37,8 @@ public class VocService {
 		return vocDAO.addProcess(processDTO);
 	}
 
+	public List<VocDTO> excelList(VocSearchDTO searchDTO) throws Exception {
+		return vocDAO.excelList(searchDTO);
+	}
+
 }

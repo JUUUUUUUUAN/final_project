@@ -17,6 +17,8 @@ public interface VocDAO {
 
 	public int addProcess(VocProcessDTO processDTO) throws Exception;
 
-	public Long count(VocSearchDTO searchDTO);
+	public Long count(VocSearchDTO searchDTO) throws Exception;
+
+	public List<VocDTO> excelList(VocSearchDTO searchDTO) throws Exception;
 
 }

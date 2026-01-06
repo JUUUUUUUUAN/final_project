@@ -113,7 +113,7 @@
 							        </div>
 							
 							        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-							            <label class="form-label small">진행 상태</label>
+							            <label class="form-label small">처리 상태</label>
 							            <select class="form-select" id="vocStatus" name="vocStatus">
 							                <option value="">전체</option>
 							                <option value="0" ${pager.vocStatus eq 0 ? 'selected' : ''}>처리 대기</option>
@@ -144,7 +144,7 @@
 							        </div>
 							
 							        <div class="col-12 d-flex align-items-end justify-content-end gap-2">
-							            <button class="btn btn-outline-secondary text-nowrap" type="reset"> 
+							            <button class="btn btn-outline-secondary text-nowrap" type="button" onclick="resetSearchForm()"> 
 							                <i class="bx bx-refresh"></i> 초기화
 							            </button>
 							            <button class="btn btn-primary text-nowrap" type="button" onclick="searchVoc()">
@@ -201,9 +201,9 @@
 								            <td>${dto.vocTitle}</td>
 								            <td>${dto.memName}</td>
 								            <td>
-								            	<c:if test="${dto.vocStatus eq 0}"><span class="badge bg-label-warning">처리 대기</span></c:if>
-								            	<c:if test="${dto.vocStatus eq 1}"><span class="badge bg-label-info">처리 중</span></c:if>
-								            	<c:if test="${dto.vocStatus eq 2}"><span class="badge bg-label-success">처리 완료</span></c:if>
+								            	<c:if test="${dto.vocStatus eq 0}"><span class="badge bg-label-warning">${dto.vocStatusStr}</span></c:if>
+								            	<c:if test="${dto.vocStatus eq 1}"><span class="badge bg-label-info">${dto.vocStatusStr}</span></c:if>
+								            	<c:if test="${dto.vocStatus eq 2}"><span class="badge bg-label-success">${dto.vocStatusStr}</span></c:if>
 								            </td>
 								            <td>${dto.vocCreatedAtStr}</td>
 					                    </tr>

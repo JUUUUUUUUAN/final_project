@@ -2,6 +2,8 @@ package com.cafe.erp.store.voc;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.cafe.erp.util.Pager;
 
 import lombok.Getter;
@@ -15,7 +17,9 @@ public class VocSearchDTO extends Pager {
 	
 	private String vocType;
 	private Integer vocStatus;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate searchStartDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate searchEndDate;
 	private String storeName;
 	private String vocTitle;
