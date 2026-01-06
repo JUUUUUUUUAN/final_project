@@ -115,18 +115,15 @@
 	  ) cnt
   	</select>
   	
-  	<!-- 상세 물품 대금 리스트 SQL -->
-  	<select id="receivableItem" parameterType="ReceivableSummaryDTO" resultType="com.cafe.erp.receivable.detail.ReceivableItemDTO">
-	  	SELECT 
-	  		r.receivable_id,
-	    	os.store_order_created_at  AS orderDate,
-	    	vi.item_name               AS itemName,
-	    	osd.store_order_qty        AS quantity,
-	    	vip.item_supply_price      AS unitPrice,
-	    	osd.store_order_amount     AS supplyAmount,
-	    	floor(osd.store_order_amount*0.1) AS taxAmount,
-	    	osd.store_order_amount+floor(osd.store_order_amount*0.1) AS totalAmount
-	    	
+  	<!-- 물품대금 미수 내역 -->
+  	<select id="orderSummary" parameterType="ReceivableSummaryDTO" resultType="com.cafe.erp.receivable.detail.ReceivableOrderSummaryDTO">
+	  	SELECT
+			r.receivable_id,
+		    os.store_order_created_at  AS orderDate,
+		    COUNT(*)         AS itemCount,
+		    SUM(osd.store_order_amount)     AS supplyAmount,
+		    SUM(floor(osd.store_order_amount*0.1)) AS taxAmount,
+		    SUM(osd.store_order_amount+floor(osd.store_order_amount*0.1)) AS totalAmount
 		FROM receivable r
 		JOIN order_store os
 			ON r.store_order_id = os.store_order_id
@@ -140,18 +137,55 @@
 			AND os.store_id = #{storeId}
 			AND DATE_FORMAT(os.store_order_created_at, '%Y-%m') = #{baseMonth}
 			AND vip.item_price_enable = 0
+		GROUP BY
+		    r.receivable_id,
+		    os.store_order_created_at
 		ORDER BY os.store_order_created_at DESC;
-  	
   	</select>
   	
+  	<!-- 상세 물품 대금 리스트 SQL -->
+  	<select id="receivableItemList" parameterType="String" resultType="com.cafe.erp.receivable.detail.ReceivableItemDTO">
+	  	SELECT
+			os.store_order_created_at AS orderDate,
+	    	vi.item_name AS itemName,
+	    	osd.store_order_qty AS quantity,
+	    	vip.item_supply_price AS unitPrice,
+	    	osd.store_order_amount AS supplyAmount,
+	    	FLOOR(osd.store_order_amount * 0.1) AS taxAmount,
+	    	osd.store_order_amount + FLOOR(osd.store_order_amount * 0.1) AS totalAmount
+		FROM
+			receivable r
+		JOIN order_store os
+			ON r.store_order_id=os.store_order_id
+		JOIN order_store_detail osd
+			ON os.store_order_id = osd.store_order_id
+		JOIN vendor_item vi
+			ON osd.item_id = vi.item_id
+		JOIN vendor_item_price vip
+			ON vi.item_id = vip.item_id
+		WHERE r.receivable_id = #{receivableId}
+			AND vip.item_price_enable = 0
+		ORDER BY vip.item_supply_price DESC
+  	</select>
   	
-  	
-  	
-  	
-  	
-  	
-  	
-  	
+  	<select id="receivableRoyalty" parameterType="ReceivableSummaryDTO" resultType="com.cafe.erp.receivable.detail.ReceivableRoyaltyDTO">
+	  	<!-- 상세 가맹비 미수 내역 -->
+	  	SELECT
+		    r.receivable_id               AS receivableId,
+		    sc.contract_start_date        AS contractDate,
+		    r.receivable_supply_amount    AS supplyAmount,
+		    r.receivable_tax_amount       AS taxAmount,
+		    r.receivable_total_amount     AS totalAmount,
+		    r.receivable_status           AS status
+		FROM receivable r
+		JOIN store_contract sc
+		  ON r.contract_id = sc.contract_id
+		WHERE sc.store_id = #{storeId}
+		  AND r.receivable_type = 'R'
+		  AND r.receivable_status IN ('O','P')
+		  AND DATE_FORMAT(r.receivable_date, '%Y-%m') = #{baseMonth}
+		ORDER BY r.receivable_date DESC
+  	</select>
   	
   	
 </mapper>

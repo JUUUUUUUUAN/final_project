@@ -9,14 +9,16 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ReceivableItemDTO {
-	
+public class ReceivableRoyaltyDTO {
+
 	private String receivableId;
-	private Date orderDate;
-	private String itemName;
-	private Integer quantity;
-	private Integer unitPrice;
+	private Date contractDate;
 	private Integer supplyAmount;
 	private Integer taxAmount;
 	private Integer totalAmount;
+	private String status;
+	
+	
+	
+	
 }

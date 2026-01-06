@@ -18,7 +18,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Receivable Detail</title>
 
     <meta name="description" content="" />
 
@@ -88,96 +88,92 @@
 				    </div>
 				  </div>
 				
-					<!-- ================= 물품대금 미수 내역 ================= -->
+					<!-- ================= 물품대금 미수 요약 내역 ================= -->
 					<div class="card mb-4">
 					  <h5 class="card-header">물품대금 미수 내역</h5>
 					
 					  <div class="table-responsive">
 					    <table class="table align-middle receivable-table">
 					
-					      <!-- ✅ CSS 기준 컬럼 정의 -->
 					      <colgroup>
 					        <col class="col-receivable">
 					        <col class="col-date">
-					        <col> <!-- 품목명 (가변) -->
 					        <col class="col-qty">
-					        <col class="col-unit">
 					        <col class="col-amount">
 					        <col class="col-tax">
 					        <col class="col-total">
+					        <col style="width:120px;">
 					      </colgroup>
 					
 					      <thead>
 					        <tr>
 					          <th class="text-center">채권코드</th>
 					          <th class="text-center">발주일자</th>
-					          <th>품목명</th>
-					          <th class="text-end">수량</th>
-					          <th class="text-end">단가</th>
+					          <th class="text-end">품목 수</th>
 					          <th class="text-end">공급가액</th>
 					          <th class="text-end">세액</th>
 					          <th class="text-end">합계</th>
+					          <th class="text-center">상세</th>
 					        </tr>
 					      </thead>
 					
 					      <tbody>
 					        <c:choose>
 					
-					          <c:when test="${empty receivableItemList}">
+					          <c:when test="${empty receivableOrderSummaryDTO}">
 					            <tr>
-					              <td colspan="8" class="text-center text-muted">
+					              <td colspan="7" class="text-center text-muted">
 					                데이터가 없습니다.
 					              </td>
 					            </tr>
 					          </c:when>
 					
 					          <c:otherwise>
-					            <c:forEach var="item" items="${receivableItemList}">
+					            <c:forEach var="row" items="${receivableOrderSummaryDTO}">
 					              <tr>
 					                <td class="text-center">
-					                  ${item.receivableId}
+					                  ${row.receivableId}
 					                </td>
 					
 					                <td class="text-center">
-					                  <fmt:formatDate value="${item.orderDate}" pattern="yyyy-MM-dd"/>
-					                </td>
-					
-					                <!-- ✅ CSS에서 ellipsis 처리 -->
-					                <td class="item-name">
-					                  ${item.itemName}
+					                  <fmt:formatDate value="${row.orderDate}" pattern="yyyy-MM-dd"/>
 					                </td>
 					
 					                <td class="text-end">
-					                  <fmt:formatNumber value="${item.quantity}" />
+					                  ${row.itemCount}건
 					                </td>
 					
 					                <td class="text-end">
-					                  <fmt:formatNumber value="${item.unitPrice}" />
+					                  <fmt:formatNumber value="${row.supplyAmount}" />
 					                </td>
 					
 					                <td class="text-end">
-					                  <fmt:formatNumber value="${item.supplyAmount}" />
-					                </td>
-					
-					                <td class="text-end">
-					                  <fmt:formatNumber value="${item.taxAmount}" />
+					                  <fmt:formatNumber value="${row.taxAmount}" />
 					                </td>
 					
 					                <td class="text-end fw-bold">
-					                  <fmt:formatNumber value="${item.totalAmount}" />
+					                  <fmt:formatNumber value="${row.totalAmount}" />
+					                </td>
+					
+					                <td class="text-center">
+										<button
+										  class="btn btn-sm btn-outline-primary"
+										  data-bs-toggle="modal"
+										  data-bs-target="#itemModal"
+										  data-receivable-id="${row.receivableId}"
+										  data-order-date='<fmt:formatDate value="${row.orderDate}" pattern="yyyy-MM-dd"/>'>
+										  리스트 보기
+										</button>
 					                </td>
 					              </tr>
 					            </c:forEach>
 					          </c:otherwise>
-					
 					        </c:choose>
 					      </tbody>
-					
 					    </table>
 					  </div>
 					</div>
 
-				
 				  <!-- ================= 가맹비 미수 내역 ================= -->
 				  <div class="card mb-4">
 				    <h5 class="card-header">가맹비 미수 내역</h5>
@@ -185,8 +181,8 @@
 				      <table class="table">
 				        <thead>
 				          <tr>
+				            <th>채권 코드</th>
 				            <th>계약일</th>
-				            <th>계약 구분</th>
 				            <th>공급가액</th>
 				            <th>세액</th>
 				            <th>합계</th>
@@ -194,11 +190,47 @@
 				          </tr>
 				        </thead>
 				        <tbody>
-				          <tr>
-				            <td colspan="6" class="text-center text-muted">
-				              데이터가 없습니다.
-				            </td>
-				          </tr>
+						  <c:choose>
+						
+						    <c:when test="${not empty receivableRoyaltyDTO}">
+						        <tr>
+						          <td>${receivableRoyaltyDTO.receivableId}</td>
+						
+						          <td>
+						            <fmt:formatDate value="${receivableRoyaltyDTO.contractDate}" pattern="yyyy-MM-dd"/>
+						          </td>
+						
+						          <td class="text-end">
+						            <fmt:formatNumber value="${receivableRoyaltyDTO.supplyAmount}" type="number"/>
+						          </td>
+						
+						          <td class="text-end">
+						            <fmt:formatNumber value="${receivableRoyaltyDTO.taxAmount}" type="number"/>
+						          </td>
+						
+						          <td class="text-end fw-bold">
+						            <fmt:formatNumber value="${receivableRoyaltyDTO.totalAmount}" type="number"/>
+						          </td>
+						
+						          <td class="text-center">
+						            <c:choose>
+						              <c:when test="${receivableRoyaltyDTO.status eq 'O'}">미지급</c:when>
+						              <c:when test="${receivableRoyaltyDTO.status eq 'P'}">부분지급</c:when>
+						              <c:when test="${receivableRoyaltyDTO.status eq 'C'}">완납</c:when>
+						            </c:choose>
+						          </td>
+						        </tr>
+						    </c:when>
+						
+						    <c:otherwise>
+						      <tr>
+						        <td colspan="6" class="text-center text-muted">
+						          데이터가 없습니다.
+						        </td>
+						      </tr>
+						    </c:otherwise>
+						
+						  </c:choose>
 				        </tbody>
 				      </table>
 				    </div>
@@ -281,8 +313,74 @@
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
+    
+	<!-- ================= 물품대금 상세 모달 ================= -->
+	<div class="modal fade" id="itemModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+	    <div class="modal-content">
+	
+	      <!-- Header -->
+	      <div class="modal-header">
+	        <h5 class="modal-title">물품대금 상세 내역</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+	      </div>
+	
+	      <!-- Body -->
+	      <div class="modal-body">
+	
+	        <!-- 상단 요약 -->
+	        <div class="row mb-3">
+	          <div class="col-md-4">
+	            <div class="text-muted small">채권코드</div>
+	            <div class="fw-bold" id="modalReceivableId"></div>
+	          </div>
+	          <div class="col-md-4">
+	            <div class="text-muted small">발주일자</div>
+	            <div class="fw-bold" id="modalOrderDate"></div>
+	          </div>
+	        </div>
+	
+	        <!-- 품목 테이블 -->
+	        <div class="table-responsive">
+	          <table class="table table-bordered align-middle">
+	            <thead class="table-light">
+	              <tr>
+	                <th class="text-center">품목명</th>
+	                <th class="text-end">수량</th>
+	                <th class="text-end">단가</th>
+	                <th class="text-end">공급가액</th>
+	                <th class="text-end">세액</th>
+	                <th class="text-end">합계</th>
+	              </tr>
+	            </thead>
+	            <tbody id="itemModalTbody">
+	              <tr>
+	                <td colspan="6" class="text-center text-muted">
+	                  품목 데이터 없음
+	                </td>
+	              </tr>
+	            </tbody>
+	          </table>
+	        </div>
+	
+	      </div>
+	
+	      <!-- Footer -->
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+	          닫기
+	        </button>
+	      </div>
+	
+	    </div>
+	  </div>
+	</div>
+	<!-- ================= 모달 끝 ================= -->
 
-
+	
+	<script type="text/javascript" src="/js/receivable/receivableDetail.js"></script>
+	
+	
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="/vendor/libs/jquery/jquery.js"></script>

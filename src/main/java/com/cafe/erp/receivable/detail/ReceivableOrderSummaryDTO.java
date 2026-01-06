@@ -9,13 +9,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ReceivableItemDTO {
+public class ReceivableOrderSummaryDTO {
 	
 	private String receivableId;
 	private Date orderDate;
-	private String itemName;
-	private Integer quantity;
-	private Integer unitPrice;
+	private Integer itemCount;
 	private Integer supplyAmount;
 	private Integer taxAmount;
 	private Integer totalAmount;

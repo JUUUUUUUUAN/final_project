@@ -22,20 +22,4 @@ public class ReceivableDTO {
 	private String hqOrderId;
 	private String StoreOrderId;
 	private String contractId;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
