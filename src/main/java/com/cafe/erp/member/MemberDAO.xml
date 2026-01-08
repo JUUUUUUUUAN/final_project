@@ -135,6 +135,7 @@
 	<update id="update" parameterType="MemberDTO">
         UPDATE member
         SET
+        	mem_name = #{memName},
             mem_zip_code = #{memZipCode},
             mem_address = #{memAddress},
             mem_address_detail = #{memAddressDetail},

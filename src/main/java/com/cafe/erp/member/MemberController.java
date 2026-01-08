@@ -138,7 +138,6 @@ public class MemberController {
 	@ResponseBody
 	public String update(MemberDTO memberDTO, @RequestParam(value = "profileImage", required = false)MultipartFile file)throws Exception{
 		String newFileName = memberService.update(memberDTO, file);
-		
 		if(newFileName != null) {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			UserDTO userDTO = (UserDTO) authentication.getPrincipal();

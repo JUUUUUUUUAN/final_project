@@ -43,11 +43,11 @@ public class SecurityConfig {
     }
     
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
         
         http
             .csrf(csrf -> csrf.disable())
-            .authenticationProvider(authenticationProvider(null))
+            .authenticationProvider(authenticationProvider(passwordEncoder))
             .authorizeHttpRequests(auth -> auth
             		.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                     .requestMatchers("/member/login", "login", "/error", "/member/sessionCheck").permitAll()                    
