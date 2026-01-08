@@ -186,6 +186,26 @@
     <script src="/vendor/js/menu.js"></script>
     
     
+    <!-- 웹 소켓 테스트 -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+	
+	<script>
+	  const socket = new SockJS("/ws");
+	  const stompClient = Stomp.over(socket);
+	
+	  stompClient.connect({}, () => {
+	    console.log("웹소켓 연결 성공");
+	
+	    stompClient.subscribe("/sub/notifications/1", (message) => {
+	      console.log("알람 수신:", message.body);
+	    });
+	  });
+	</script>
+    <!-- 웹 소켓 테스트 -->
+    
+    
+    
     
     <!-- endbuild -->
 
