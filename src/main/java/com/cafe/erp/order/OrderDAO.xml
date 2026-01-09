@@ -11,7 +11,7 @@
     	
     	<!-- 발주 추가 -->
     	<insert id="insertOrder" parameterType="OrderDTO">
-    		insert into order_hq values(#{hqOrderId}, now(), null, 100, 118001);
+    		insert into order_hq values(#{hqOrderId}, now(), null, 100, 118001, #{hqOrderTotalAmount});
     	</insert>
     	
     	<!-- 발주 상세 추가 -->
@@ -33,7 +33,24 @@
     	</insert>
     	
     	<!-- 발주 목록 요청 -->
-    	<select id="listRequest" resultType="OrderDTO">
-    		select * from order_hq
+    	<select id="listHq" resultType="OrderDTO">
+    		select * from order_hq where hq_order_status = 100
     	</select>
+    	<select id="listStore" resultType="OrderDTO">
+    		select
+    			s.store_order_id as hqOrderId,
+    			s.store_order_total_amount as hqOrderTotalAmount,
+    			s.member_id as memberId,
+    			s.store_order_approver as storeOrderApprover,
+    			s.store_rejection_reason as storeRejectionReason 
+    		from order_store s where store_order_status = 100
+    	</select>
+    	<!-- 발주 상세 목록 요청 -->
+    	<select id="getOrderItems" resultType="OrderDetailDTO">
+    		select * from order_hq_detail where hq_order_id = #{orderNo}
+    	</select>
+    	<!-- 발주 승인 처리 -->
+    	<update id="approveOrder" parameterType="String">
+    		update order_hq set hq_order_status = 400 where hq_order_id = #{orderNo}
+    	</update>
     </mapper>

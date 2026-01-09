@@ -189,7 +189,13 @@
 						  <div class="card-body text-end">
 						    <h5 class="mb-0">
 						      총 발주 금액 :
-						      <span class="text-primary fw-bold" id="grandTotal"></span> 원
+						      <!-- 화면 표시용 -->
+							  <input type="text"
+								     class="text-primary fw-bold totalAmount"
+								     id="grandTotalView"
+								       readonly>
+						      <!-- 서버 전송용 (순수 숫자) -->
+							  <input type="hidden" id="grandTotal" name="hqOrderTotalAmount">
 						    </h5>
 						  </div>
 						</div>
@@ -241,12 +247,8 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     
-    
-    <!--  -->
-    <script src="/js/order/search.js"></script>
-    <script src="/js/order/orderListAdd.js"></script>
-    <script src="/js/order/totalCalculator.js"></script>
-    <script src="/js/order/removeItem.js"></script>
-    
+
+    <!-- order JS -->
+    <script src="/js/order/orderRequest.js"></script>
   </body>
 </html>

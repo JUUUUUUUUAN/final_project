@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.cafe.erp.item.ItemDTO;
+
 @Service
 public class OrderService {
 	
@@ -73,8 +75,23 @@ public class OrderService {
 	  }
 	
 	// 발주 목록 
-	public List<OrderDTO> listRequest() {
-		return orderDAO.listRequest();
+	public List<OrderDTO> listHq() {
+		return orderDAO.listHq();
 	}
+	public List<OrderDTO> listStore() {
+		return orderDAO.listStore();
+	}
+	
+	public List<OrderDetailDTO> getOrderItems(String orderNo) {
+		return orderDAO.getOrderItems(orderNo);
+	}
+	
+	public void approveOrder(List<String> orderNos) {
+		
+		for (String orderNo : orderNos) {
+			orderDAO.approveOrder(orderNo);			
+		}
+	}
+	
 
 }

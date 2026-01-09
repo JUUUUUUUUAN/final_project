@@ -2,11 +2,13 @@ package com.cafe.erp.order;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -63,8 +65,31 @@ public class OrderController {
 	// 발주 목록 요청
 	@GetMapping("approval")
 	public void approval(Model model) {
-		List<OrderDTO> orderList = orderService.listRequest();
-		model.addAttribute("orderList", orderList);
+		List<OrderDTO> orderHqList = orderService.listHq();
+		model.addAttribute("orderHqList", orderHqList);
+		List<OrderDTO> orderStoreList = orderService.listStore();
+		model.addAttribute("orderStoreList", orderStoreList);
+	}
+	
+	@GetMapping("detail")
+	public String orderDetail(@RequestParam String orderNo, Model model) {
+		System.out.println("🔥 orderNo = " + orderNo);
+	    List<OrderDetailDTO> items = orderService.getOrderItems(orderNo);
+	    System.out.println("🔥 items size = " + items.size());
+	    System.out.println(items.iterator().next().getHqOrderItemName());
+	    System.out.println(items.iterator().next().getHqOrderQty());
+	    System.out.println(items.iterator().next().getHqOrderPrice());
+	    System.out.println(items.iterator().next().getHqOrderAmount());
+	    model.addAttribute("items", items);
+
+	  return "order/orderDetailFragment"; // tbody용 fragment
+	}
+	
+	@PostMapping("approve")
+	@ResponseBody
+	public String approveOrder(@RequestBody List<String> orderNos) {
+		orderService.approveOrder(orderNos);
+		return null;
 	}
 
 }
