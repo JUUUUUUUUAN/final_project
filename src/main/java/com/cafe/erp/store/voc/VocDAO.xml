@@ -55,6 +55,17 @@
 		INSERT INTO voc(member_id, store_id, voc_title , voc_type, voc_contact, voc_contents, voc_status, voc_created_at, voc_updated_at) 
 		VALUES (#{memberId}, #{storeId}, #{vocTitle}, #{vocType}, #{vocContact}, #{vocContents}, 0, now(), now())
 	</insert>
+	<!-- 알림 용 가맹점주 아이디 -->
+	<select id="vocOnwerId" parameterType="VocDTO" resultType="int">
+		SELECT m.member_id 
+		FROM
+		 store s
+		JOIN member m
+		ON m.member_id = s.member_id
+		WHERE s.store_id = #{storeId}
+	</select>
+	
+	
 	
 	<select id="detail" parameterType="Integer" resultType="VocDTO">
 		SELECT 
