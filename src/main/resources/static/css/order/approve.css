@@ -104,7 +104,7 @@
 .order-left-body {
   flex: 1;
   overflow: visible !important; /* 🔥 핵심 */
-  padding: 0 16px 16px;
+  padding: 0 1.5rem;
 }
 
 /* ===============================
@@ -162,11 +162,6 @@
 }
 
 
-/* Boxicons 아이콘 복구 */
-.bx::before,
-.menu-icon::before,
-.tf-icons::before {
-  content: inherit !important;
-  display: inline-block !important;
+.card-body {
+	flex: none;
 }
-	

@@ -80,7 +80,7 @@
 				      <div class="content-wrapper">
 				
 				        <!-- ================= 발주 화면 ================= -->
-				        <div class="card p-3 order-container">
+				        <div class="card p-3">
 				          <div class="row g-3">
 				
 				            <!-- ================= 왼쪽: 발주 목록 ================= -->
@@ -156,6 +156,7 @@
 				                          <th>금액</th>
 				                          <th>가맹코드</th>
 				                          <th>상태</th>
+				                          <th>사유</th>
 				                        </tr>
 				                      </thead>
 				                      <tbody>
@@ -168,6 +169,7 @@
 				                            </td>
 				                            <td>${o.memberId}</td>
 				                            <td><span class="badge bg-label-warning">요청</span></td>
+				                            <td></span></td>
 				                          </tr>
 				                        </c:forEach>
 				                      </tbody>
@@ -246,6 +248,8 @@
               
               
 			</div>
+			<!-- content 끝 -->
+			
             <!-- Footer -->
             <c:import url="/WEB-INF/views/template/footer.jsp"></c:import>
             <!-- / Footer -->
