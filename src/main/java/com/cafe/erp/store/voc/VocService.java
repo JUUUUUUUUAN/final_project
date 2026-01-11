@@ -33,8 +33,9 @@ public class VocService {
 
 	public int add(VocDTO vocDTO , Integer memberId) throws Exception {
 		vocDTO.setMemberId(memberId);
-		int onwerId = vocDAO.vocOnwerId(vocDTO);
-		vocDTO.setOwnerId(onwerId);
+		VocDTO onwer = vocDAO.vocOnwerId(vocDTO);
+		vocDTO.setMemName(onwer.getMemName());
+		vocDTO.setOwnerId(onwer.getOwnerId());
 		return vocDAO.add(vocDTO);
 	}
 

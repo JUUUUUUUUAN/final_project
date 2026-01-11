@@ -51,9 +51,10 @@ public class VocController {
 			@AuthenticationPrincipal UserDTO userDTO
 			)
 			throws Exception {
-		int reuslt = vocService.add(vocDTO , userDTO.getMember().getMemberId());
+		System.out.println("controller vocDTO========"+vocDTO.toString());
+		int result = vocService.add(vocDTO , userDTO.getMember().getMemberId());
 		notificationService.sendVocNotification(vocDTO);
-		return result(reuslt); 
+		return result(result); 
 		
 	}
 	

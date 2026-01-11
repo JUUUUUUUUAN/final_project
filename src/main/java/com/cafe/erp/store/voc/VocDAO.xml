@@ -56,8 +56,10 @@
 		VALUES (#{memberId}, #{storeId}, #{vocTitle}, #{vocType}, #{vocContact}, #{vocContents}, 0, now(), now())
 	</insert>
 	<!-- 알림 용 가맹점주 아이디 -->
-	<select id="vocOnwerId" parameterType="VocDTO" resultType="int">
-		SELECT m.member_id 
+	<select id="vocOnwerId" parameterType="VocDTO" resultType="VocDTO">
+		SELECT 
+			m.member_id,
+			m.mem_name
 		FROM
 		 store s
 		JOIN member m

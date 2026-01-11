@@ -12,7 +12,7 @@ public interface VocDAO {
 
 	public int add(VocDTO vocDTO) throws Exception;
 	
-	public int vocOnwerId(VocDTO vocDTO) throws Exception;
+	public VocDTO vocOnwerId(VocDTO vocDTO) throws Exception;
 
 	public VocDTO detail(Integer vocId) throws Exception;
 

@@ -36,84 +36,47 @@
     
     <!-- 오른쪽 영역 -->
     <ul class="navbar-nav flex-row align-items-center">
-	<!-- 🔔 알림 -->
-	<li class="nav-item dropdown">
-	  <a class="nav-link dropdown-toggle hide-arrow position-relative"
-	     href="#"
-	     data-bs-toggle="dropdown">
-	
-	    <i class="bx bx-bell bx-sm"></i>
-	
-	    <!-- 안읽은 알림 개수 -->
-	    <span class="badge bg-danger rounded-pill position-absolute"
-	          style="top: 0; right: 0; font-size: 0.65rem;">
-	      3
-	    </span>
-	  </a>
-	
-	  <!-- 알림 드롭다운 -->
-	  <ul class="dropdown-menu dropdown-menu-end p-2"
-	      style="width: 380px;">
-	
-	    <!-- 헤더 -->
-	    <li class="dropdown-header fw-bold mb-2">
-	      알림
-	    </li>
-	
-	    <!-- 알림 1 : 안읽음 -->
-	    <li>
-	      <a href="#"
-	         class="dropdown-item p-2 rounded border border-primary mb-2"
-	         style="background-color:#f8f9ff;">
-	
-	        <div class="d-flex align-items-start">
-	          <span class="badge bg-label-primary p-2 me-2">
-	            <i class="bx bx-file"></i>
-	          </span>
-	
-	          <div>
-	            <div class="fw-bold">결재 요청이 도착했습니다</div>
-	            <small class="text-muted">
-	              결재 문서 A-1023 승인 요청
-	            </small>
-	          </div>
-	        </div>
-	      </a>
-	    </li>
-	
-	    <!-- 알림 2 -->
-	    <li>
-	      <a href="#"
-	         class="dropdown-item p-2 rounded mb-2">
-	
-	        <div class="d-flex align-items-start">
-	          <span class="badge bg-label-success p-2 me-2">
-	            <i class="bx bx-package"></i>
-	          </span>
-	
-	          <div>
-	            <div class="fw-bold">발주 승인 대기 중입니다</div>
-	            <small class="text-muted">
-	              발주 번호 B-5581
-	            </small>
-	          </div>
-	        </div>
-	      </a>
-	    </li>
-	
-	    <li><hr class="dropdown-divider"></li>
-	
-	    <!-- 전체 알림 보기 → 모달 -->
-	    <li>
-	      <button class="dropdown-item text-center fw-bold text-primary"
-	              data-bs-toggle="modal"
-	              data-bs-target="#notificationModal">
-	        전체 알림 보기
-	      </button>
-	    </li>
-	
-	  </ul>
-	</li>
+		<!-- 🔔 알림 -->
+		<li class="nav-item dropdown">
+		  <a class="nav-link dropdown-toggle hide-arrow position-relative"
+		     href="#"
+		     data-bs-toggle="dropdown">
+		
+		    <i class="bx bx-bell bx-sm"></i>
+		
+		    <!-- 🔔 안읽은 알림 개수 -->
+		    <span class="badge bg-danger rounded-pill position-absolute"
+		          id="notificationBadge"
+		          style="top: 0; right: 0; font-size: 0.65rem; display:none;">
+		    </span>
+		  </a>
+		
+		  <!-- 🔔 알림 드롭다운 -->
+		  <ul class="dropdown-menu dropdown-menu-end p-2"
+		      style="width: 380px;"
+		      id="notificationDropdown">
+		
+		    <!-- 헤더 -->
+		    <li class="dropdown-header fw-bold mb-2">
+		      알림
+		    </li>
+		
+		    <li id="notificationList"></li>
+		
+		    <li><hr class="dropdown-divider"></li>
+		
+		    <!-- 전체 알림 보기 -->
+		    <li>
+		      <button class="dropdown-item text-center fw-bold text-primary"
+		              data-bs-toggle="modal"
+		              data-bs-target="#notificationModal">
+		        전체 알림 보기
+		      </button>
+		    </li>
+		
+		  </ul>
+		</li>
+
 
       <!-- 👤 사용자 -->
       
@@ -241,4 +204,4 @@
     </div>
   </div>
 </div>
-
+<script type="text/javascript" src="/js/notification/notification.js"></script>
