@@ -21,9 +21,6 @@ public class NotificationController {
     @Autowired
     private NotificationDAO notificationDAO;
 
-    /**
-     *  내 알림 목록 조회
-     */
     @GetMapping
     public List<NotificationDTO> getMyNotifications(
             @AuthenticationPrincipal UserDetails user) {
@@ -32,9 +29,6 @@ public class NotificationController {
         return notificationDAO.selectNotificationList(memberId);
     }
 
-    /**
-     *  알림 읽음 처리
-     */
     @PatchMapping("/{notificationId}/read")
     public void readNotification(
             @PathVariable long notificationId) {
@@ -42,9 +36,6 @@ public class NotificationController {
         notificationDAO.updateReadYn(notificationId);
     }
 
-    /**
-     *  안 읽은 알림 개수 (헤더용)
-     */
     @GetMapping("/unread-count")
     public int getUnreadCount(
             @AuthenticationPrincipal UserDetails user) {

@@ -2,6 +2,8 @@ package com.cafe.erp.notification.service;
 
 
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -39,15 +41,14 @@ public class NotificationService {
         notification.setNotificationLink( "/store/voc/detail?vocId=" + vocDTO.getVocId());
         notification.setSenderMemberId(vocDTO.getMemberId().intValue());
         notification.setReceiverMemberId(receiverId);
+        notification.setNotificationCreatedAt(LocalDateTime.now());
         notificationDAO.insertNotification(notification);
         
-        log.info("🔥 WS send start receiverId={}, dest={}", receiverId, "/sub/notification");
         //실시간 알림
         messagingTemplate.convertAndSendToUser(
             String.valueOf(receiverId),
             "/sub/notification",
             notification
         );
-        log.info("🔥 WS send end receiverId={}", receiverId);
     }
 }

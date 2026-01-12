@@ -82,35 +82,10 @@ function increaseNotificationBadge() {
 
 
 function prependNotification(n) {
-    const list = document.getElementById("notificationList");
-
-    const type = n.notificationType?.toLowerCase() || "voc";
-
-    const iconMap = {
-        voc: "bx-comment-detail",
-        chat: "bx-chat",
-        notice: "bx-info-circle"
-    };
-
-    const li = document.createElement("li");
-    li.innerHTML = `
-        <a class="dropdown-item notification-row ${type}">
-            <div class="notification-icon">
-                <i class="bx ${iconMap[type]}"></i>
-            </div>
-            <div class="notification-text">
-                <div class="notification-title">${n.notificationTitle}</div>
-                <div class="notification-desc">${n.notificationContent}</div>
-            </div>
-        </a>
-    `;
-
-    li.onclick = () => {
-        fetch(`/api/notifications/${n.notificationId}/read`, { method: "PATCH" });
-        location.href = n.notificationLink;
-    };
-
-    list.prepend(li);
+  const list = document.getElementById("notificationList");
+  const item = createNotificationItem(n);
+  list.prepend(item);
 }
+
 
 
