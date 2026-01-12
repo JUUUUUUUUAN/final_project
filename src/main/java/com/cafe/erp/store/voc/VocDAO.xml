@@ -6,6 +6,10 @@
 
 	<sql id="searchCondition">
         <where>
+			<if test="searchStoreId != null">
+				AND v.store_id = #{searchStoreId}
+			</if>
+
             <if test="searchVocType != null and searchVocType != ''">
                 AND v.voc_type = #{searchVocType}
             </if>
