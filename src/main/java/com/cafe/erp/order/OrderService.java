@@ -43,6 +43,10 @@ public class OrderService {
 		insertOrder(orderDTO, isHqOrder);
 		// 발주 상세 insert
 		insertOrderItemDetail(orderDTO, isHqOrder);
+		
+		
+		
+		
 	}
 	
 	// orderId 생성

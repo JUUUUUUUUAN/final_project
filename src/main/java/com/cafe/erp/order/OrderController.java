@@ -34,7 +34,6 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 	
-	@Autowired
     public OrderController(ItemService itemService, VendorService vendorService, StoreService storeService) {
         this.itemService = itemService;
         this.vendorService = vendorService;

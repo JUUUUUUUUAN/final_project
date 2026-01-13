@@ -158,22 +158,12 @@
   border-bottom: none;
   padding: 20px 24px 12px;
 }
-/* 모달 전체 높이 고정 */
-.notification-modal {
-  height: 70vh;
-  display: flex;
-  flex-direction: column;
-   border-radius: 14px;
-}
 
-/* body는 flex */
 .notification-modal-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  max-height: 60vh;
+  overflow-y: auto;
   padding: 0 24px 16px;
 }
-
 
 .modal-list .notify-item {
   background: #f9fafb;
