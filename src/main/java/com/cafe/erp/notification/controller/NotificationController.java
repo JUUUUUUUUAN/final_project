@@ -9,47 +9,42 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cafe.erp.notification.NotificationDAO;
 import com.cafe.erp.notification.NotificationDTO;
+import com.cafe.erp.notification.service.NotificationService;
 
 @RestController
 @RequestMapping("/api/notifications")
 public class NotificationController {
 
     @Autowired
-    private NotificationDAO notificationDAO;
+    private NotificationService service;
 
-    /**
-     *  내 알림 목록 조회
-     */
     @GetMapping
-    public List<NotificationDTO> getMyNotifications(
-            @AuthenticationPrincipal UserDetails user) {
+    public List<NotificationDTO> selectNotificationPage(
+            @AuthenticationPrincipal UserDetails user,
+            @RequestParam int page,
+            @RequestParam int size) {
 
         int memberId = Integer.parseInt(user.getUsername());
-        return notificationDAO.selectNotificationList(memberId);
+        return service.selectNotificationPage(memberId, page, size);
     }
 
-    /**
-     *  알림 읽음 처리
-     */
     @PatchMapping("/{notificationId}/read")
-    public void readNotification(
+    public void updateReadYn(
             @PathVariable long notificationId) {
 
-        notificationDAO.updateReadYn(notificationId);
+    	service.updateReadYn(notificationId);
     }
 
-    /**
-     *  안 읽은 알림 개수 (헤더용)
-     */
     @GetMapping("/unread-count")
-    public int getUnreadCount(
+    public int selectUnreadCount(
             @AuthenticationPrincipal UserDetails user) {
 
         int memberId = Integer.parseInt(user.getUsername());
-        return notificationDAO.selectUnreadCount(memberId);
+        return service.selectUnreadCount(memberId);
     }
 }

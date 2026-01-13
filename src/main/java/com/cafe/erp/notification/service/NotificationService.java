@@ -2,6 +2,10 @@ package com.cafe.erp.notification.service;
 
 
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -21,13 +25,10 @@ public class NotificationService {
 
     @Autowired
     private NotificationDAO notificationDAO;
-
+    // voc 알람 메서드
     public void sendVocNotification(VocDTO vocDTO) {
-
         // 수신자 (점주)
         int receiverId = vocDTO.getOwnerId().intValue();
-        
-        
         //DB 저장
         NotificationDTO notification = new NotificationDTO();
         notification.setNotificationType("VOC");
@@ -39,15 +40,39 @@ public class NotificationService {
         notification.setNotificationLink( "/store/voc/detail?vocId=" + vocDTO.getVocId());
         notification.setSenderMemberId(vocDTO.getMemberId().intValue());
         notification.setReceiverMemberId(receiverId);
+        notification.setNotificationCreatedAt(
+        		LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+        		);
         notificationDAO.insertNotification(notification);
-        
-        log.info("🔥 WS send start receiverId={}, dest={}", receiverId, "/sub/notification");
+        notification.setNotificationReadYn("N");
         //실시간 알림
         messagingTemplate.convertAndSendToUser(
             String.valueOf(receiverId),
             "/sub/notification",
             notification
         );
-        log.info("🔥 WS send end receiverId={}", receiverId);
     }
+    
+    public List<NotificationDTO> selectNotificationPage(
+            int memberId, int page, int size) {
+
+        int offset = page * size;
+        return notificationDAO.selectNotificationPage(
+            memberId, size, offset
+        );
+    }
+    
+    
+    public int selectUnreadCount(int memberId) {
+        return notificationDAO.selectUnreadCount(memberId);
+    }
+    
+    public void updateReadYn(long notificationId) {
+        notificationDAO.updateReadYn(notificationId);
+    }
+    
+    
+    
+    
+    
 }

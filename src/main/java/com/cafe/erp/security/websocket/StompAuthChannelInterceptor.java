@@ -27,8 +27,6 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
                 SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication == null || !authentication.isAuthenticated()) {
-                // ❌ 예외 던지지 말 것
-                System.out.println("⚠️ [WS] Authentication 없음");
                 return message;
             }
 
@@ -39,11 +37,7 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
                 String memberId = String.valueOf(member.getMemberId());
                 accessor.setUser(() -> memberId);
 
-                System.out.println("✅ [WS] Principal set to memberId=" + memberId);
 
-            } else {
-                // ❌ 예외 던지지 말 것
-                System.out.println("⚠️ [WS] Unknown principal type: " + principal);
             }
         }
 

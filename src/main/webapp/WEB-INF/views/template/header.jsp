@@ -63,7 +63,7 @@
 		      알림
 		    </li>
 		
-		    <li id="notificationList"></li>
+		    <ul id="notificationList" class="notification-list"></ul>
 		
 		    <li><hr class="dropdown-divider"></li>
 		
