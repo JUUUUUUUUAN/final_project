@@ -1,3 +1,30 @@
+/*페이지 로딩 시 버튼 비활성화*/
+$(document).on('change', '.order-check', function () {
+  updateActionButtons();
+});
+
+/*페이지 로딩 시 반려건 비활성화: 본사건 처리*/
+$('.order-row').each(function () {
+  const status = $(this).data('status');
+
+  if (status === 150) { // 반려
+    $(this).addClass('row-disabled');
+    $(this).find('.order-check').prop('disabled', true);
+  }
+});
+
+/*페이지 로딩 시 반려건 활성화: 가맹건 처리*/
+if (isStoreUser) {
+  $('.order-row').each(function () {
+    const status = $(this).data('status');
+
+    if (status === 150) {
+      $(this).removeClass('row-disabled');
+      $(this).find('.order-check').prop('disabled', false);
+    }
+  });
+}
+
 function updateActionButtons() {
   const checkedCount = $('.order-check:checked').length;
 

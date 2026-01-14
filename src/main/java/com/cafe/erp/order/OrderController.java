@@ -83,7 +83,7 @@ public class OrderController {
 	// 목록 요청 
 	@GetMapping("list")
 	@Transactional
-	public String orderList(
+	public String orderList(@RequestParam(defaultValue = "hq") String viewType,
 			@RequestParam List<Integer> statuses,
 			Model model, MemberDTO member) {
 		
@@ -95,25 +95,35 @@ public class OrderController {
 	    model.addAttribute("member", member);
 	    boolean hasRequest = statuses.contains(100);
 	    boolean hasApproved = statuses.contains(200);
+	    boolean isHqUser = String.valueOf(member.getMemberId()).startsWith("1");
+	    boolean isStoreUser = String.valueOf(member.getMemberId()).startsWith("2");
+	    boolean isHqOrderView = "hq".equals(viewType);
+	    boolean isStoreOrderView = "store".equals(viewType);
 
 	    model.addAttribute("hasRequest", hasRequest);
 	    model.addAttribute("hasApproved", hasApproved);
+	    model.addAttribute("isHqUser", isHqUser);
+	    model.addAttribute("isStoreUser", isHqUser);
+	    model.addAttribute("isHqOrderView", isHqOrderView);
+	    model.addAttribute("isStoreOrderView", isStoreOrderView);
 
 	    return "order/approval"; // JSP 하나만 사용
 	}
 	// 발주 목록 요청
 	@GetMapping("approval")
-	public String approval(Model model, @AuthenticationPrincipal UserDTO userDTO) {
+	public String approval(Model model, @AuthenticationPrincipal UserDTO userDTO,
+			 @RequestParam(defaultValue = "hq") String viewType) {
 		MemberDTO member = userDTO.getMember();
 		List<Integer> statuses = List.of(100, 150); // 요청 + 반려
-	    return orderList(statuses, model, member);
+	    return orderList(viewType, statuses, model, member);
 	}
 	// 입고 목록 요청
 	@GetMapping("receive")
-	public String receive(Model model, @AuthenticationPrincipal UserDTO userDTO) {
+	public String receive(Model model, @AuthenticationPrincipal UserDTO userDTO,
+			@RequestParam(defaultValue = "hq") String viewType) {
 		MemberDTO member = userDTO.getMember();
 		List<Integer> statuses = List.of(200); // 승인
-		return orderList(statuses, model, member);
+		return orderList(viewType, statuses, model, member);
 	}
 	
 	//출고 목록 요청

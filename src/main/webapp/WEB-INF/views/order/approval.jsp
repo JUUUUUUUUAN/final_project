@@ -99,23 +99,36 @@
 									</c:when>
 								  </c:choose>
 				                  <div class="d-flex gap-2">
-								  <!-- 본사 -->
-				                  <c:choose>
-									  <c:when test="${fn:startsWith(member.memberId, '1')}">
+								  <c:choose>
+									  <c:when test="${isHqUser}">
 									    <c:if test="${hasRequest}">
-									      <button type="button" class="btn btn-sm btn-success" id="approveBtn">승인</button>
-									      <button type="button" class="btn btn-sm btn-warning" id="rejectBtn">반려</button>
+									      
+									      <c:if test="${isHqOrderView}">
+									        <button type="button" class="btn btn-sm btn-success" id="approveBtn">승인</button>
+									      </c:if>
+									
+									      <c:if test="${isStoreOrderView}">
+									        <button type="button" class="btn btn-sm btn-success" id="approveBtn">승인</button>
+									        <button type="button" class="btn btn-sm btn-warning" id="rejectBtn">반려</button>
+									      </c:if>
+									
 									    </c:if>
+									
 									    <c:if test="${hasApproved}">
 									      <button class="btn btn-success btn-sm" id="receiveBtn">입고</button>
 									      <button type="button" class="btn btn-danger btn-sm">승인취소</button>
 									    </c:if>
 									  </c:when>
-									  <c:otherwise>
+									
+									  <c:when test="${isStoreUser}">
+									    <c:if test="${hasRequest}">
+									      <button id="editOrderBtn" class="btn btn-primary btn-sm" disabled>수정</button>
+									    </c:if>
+									
 									    <c:if test="${hasApproved}">
 									      <button type="button" class="btn btn-danger btn-sm">승인취소</button>
 									    </c:if>
-									  </c:otherwise>
+									  </c:when>
 									</c:choose>
 				                  </div>
 				                </div>
@@ -123,34 +136,40 @@
 				                <!-- 탭 -->
 				                <div class="card-body pb-0">
 				                  <ul class="nav nav-tabs">
-				                    <!-- 본사의 경우 본사/가맹 둘다 표시 -->
-								    <c:if test="${fn:startsWith(member.memberId, '1')}">
-					                    <li class="nav-item">
-					                      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#hqOrderTab">
-					                        본사 발주
-					                      </button>
-					                    </li>
-					                    <li class="nav-item">
-					                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#storeOrderTab">
-					                        가맹 발주
-					                      </button>
-					                    </li>
-								    </c:if>
-								    <c:if test="${fn:startsWith(member.memberId, '2')}">
-					                    <li class="nav-item">
-					                      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#storeOrderTab">
-					                        가맹 발주
-					                      </button>
-					                    </li>
-								    </c:if>
+								    <%-- 본사 계정: 본사 + 가맹 탭 --%>
+									  <c:if test="${isHqOrderView}">
+									    <li class="nav-item">
+									      <a class="nav-link ${isHqOrderView ? 'active' : ''}"
+									         href="/order/approval?viewType=hq">
+									        본사 발주
+									      </a>
+									    </li>
+									
+									    <li class="nav-item">
+									      <a class="nav-link ${isStoreOrderView ? 'active' : ''}"
+									         href="/order/approval?viewType=store">
+									        가맹 발주
+									      </a>
+									    </li>
+									  </c:if>
+									
+									  <%-- 가맹 계정: 가맹 탭만 --%>
+									  <c:if test="${isStoreUser}"">
+									    <li class="nav-item">
+									      <a class="nav-link active"
+									         href="/order/approval?viewType=store">
+									        가맹 발주
+									      </a>
+									    </li>
+									  </c:if>
 								    
 				                  </ul>
 				                </div>
 				
 				                <!-- 목록 -->
 				                <div class="tab-content order-left-body">
-								  <c:if test="${fn:startsWith(member.memberId, '1')}">
 				                  <!-- 본사 발주 -->
+								  <c:if test="${isStoreUser}">
 				                  <div class="tab-pane fade show active" id="hqOrderTab">
 				                    <table class="table table-bordered text-center align-middle mb-0">
 				                      <thead class="table-light">
@@ -166,7 +185,7 @@
 				                      </thead>
 				                      <tbody>
 				                        <c:forEach var="o" items="${orderHqList}">
-				                          <tr class="order-row" data-order-no="${o.hqOrderId}" data-order-member="${member.memberId}" data-order-type="HQ">
+				                          <tr class="order-row" data-order-no="${o.hqOrderId}" data-order-member="${member.memberId}" data-order-type="HQ" data-status="${o.hqOrderStatus}">
 				                            <td class="chk-td"><input type="checkbox" class="order-check" /></td>
 				                            <td>${o.hqOrderId}</td>
 				                            <td class="text-end">
@@ -202,7 +221,7 @@
 								  
 								  
 				                  <!-- 가맹 발주 -->
-				                  <div class="tab-pane fade ${fn:startsWith(member.memberId, '2') ? 'active show' : ''}" id="storeOrderTab">
+				                  <div class="tab-pane fade ${isStoreUser ? 'active show' : ''}" id="storeOrderTab">
 				                    <table class="table table-bordered text-center align-middle mb-0">
 				                      <thead class="table-light">
 				                        <tr>
@@ -218,7 +237,7 @@
 				                      </thead>
 				                      <tbody>
 				                        <c:forEach var="o" items="${orderStoreList}">
-				                          <tr class="order-row" data-order-no="${o.hqOrderId}" data-order-type="STORE">
+				                          <tr class="order-row" data-order-no="${o.hqOrderId}" data-order-type="STORE" data-status="${o.hqOrderStatus}">
 				                            <td class="chk-td"><input type="checkbox" class="order-check"/></td>
 				                            <td>${o.hqOrderId}</td>
 				                            <td class="text-end">

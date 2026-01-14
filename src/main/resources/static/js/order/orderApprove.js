@@ -88,7 +88,7 @@ function removeFromApprovalList(orderNo) {
 
 
 $(document).ready(function () {
-
+	
   /* ===============================
      전체 선택 (Select All)
   ================================ */
