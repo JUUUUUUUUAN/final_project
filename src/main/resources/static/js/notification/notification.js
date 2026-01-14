@@ -112,15 +112,19 @@ function createNotificationItem(n) {
 	  : "voc";
 	
 	li.className = `notify-item ${typeClass} ${n.notificationReadYn === "N" ? "unread" : ""}`;
+	
+	let iconClass = "bx-message-rounded-detail"; // VOC 기본
+
+	if (typeClass === "order") {
+	  iconClass = "bx-package";
+	} else if (typeClass === "reject") {
+	  iconClass = "bx-error-circle";
+	}
 
 
   li.innerHTML = `
 	  <div class="notify-icon">
-	    <i class="bx ${
-	      typeClass === "order"
-	        ? "bx-package"
-	        : "bx-message-rounded-detail"
-	    }"></i>
+	    <i class="bx ${iconClass}"></i>
 	  </div>
     <div class="notify-body">
       <div class="notify-header">

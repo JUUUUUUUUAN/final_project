@@ -178,9 +178,21 @@ public class OrderService {
 	public List<OrderDetailDTO> getApprovedOrderDetail() {
 		return orderDAO.getApprovedOrderDetail();
 	}
-	
-	public void rejectOrder(OrderRejectDTO orderRejectDTO) {
+	// 반려
+	public void rejectOrder(OrderRejectDTO orderRejectDTO, UserDTO userDTO) {
+		// 발주테이블 상태값을 반려로 update
 		orderDAO.rejectOrder(orderRejectDTO);
+		// 가맹점주 아이디 조회
+		OrderRejectDTO result = orderDAO.rejectOrderNotification(orderRejectDTO);
+		int senderMemberId = userDTO.getMember().getMemberId(); // 본사 직원 아이디
+		int receiverMemberId = result.getStoreMemberId(); // 가맹점주 아이디
+		String orderId = result.getRejectId(); // 발주 번호
+		
+		notificationService.sendOrderRejectNotification(
+				senderMemberId,
+				receiverMemberId,
+				orderId
+		);
 	}
 
 }

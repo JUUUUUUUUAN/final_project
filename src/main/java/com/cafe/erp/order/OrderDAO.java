@@ -36,4 +36,7 @@ public interface OrderDAO {
 	public List<OrderDetailDTO> getApprovedOrderDetail();
 
 	public void rejectOrder(OrderRejectDTO OrderRejectDTO);
+	// 발주 반려 시 알림 기능 (가맹점주 아이디 조회)
+	public OrderRejectDTO rejectOrderNotification(OrderRejectDTO orderRejectDTO);
+	
 }
