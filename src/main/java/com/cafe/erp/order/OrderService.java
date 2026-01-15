@@ -5,11 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
-import com.cafe.erp.item.ItemDTO;
 import com.cafe.erp.member.MemberDTO;
 import com.cafe.erp.notification.service.NotificationService;
 import com.cafe.erp.security.UserDTO;
@@ -22,6 +21,9 @@ public class OrderService {
 	
 	@Autowired
 	private OrderDAO orderDAO;
+	
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
 	
 	@Autowired
 	private NotificationService notificationService;
@@ -247,11 +249,17 @@ public class OrderService {
 	        if ("HQ".equals(orderNo.getOrderType())) {
 	            orderDAO.receiveHqOrder(orderNo.getOrderNo());
 	            orderDetailList = orderDAO.getHqOrderDetail(orderNo.getOrderNo());
+	            eventPublisher.publishEvent(
+                        new OrderReceivedEvent("HQ", orderNo.getOrderNo())
+                );
 	            // 3 입출고번호 생성(입출고타입, 창고번호, 본사발주번호, 가맹발주번호)
 	            warehouseNo = 11;
 	            stockInoutDTO = settingStock(orderNo.getOrderType(), 11, orderNo.getOrderNo());
 	        } else {
 	            orderDAO.receiveStoreOrder(orderNo.getOrderNo());
+	            eventPublisher.publishEvent(
+                        new OrderReceivedEvent("STORE", orderNo.getOrderNo())
+                );
 	            orderDetailList = orderDAO.getStoreOrderDetail(orderNo.getOrderNo());
 	            // 3 입출고번호 생성(입출고타입, 창고번호, 본사발주번호, 가맹발주번호)
 	            int storeId = member.getMemberId();
