@@ -26,6 +26,7 @@ import com.cafe.erp.member.attendance.MemberAttendanceDAO;
 import com.cafe.erp.member.attendance.MemberAttendanceDTO;
 import com.cafe.erp.member.attendance.MemberLeaveStatsDTO;
 import com.cafe.erp.member.commute.MemberCommuteDTO;
+import com.cafe.erp.member.commute.MemberCommuteSearchDTO;
 import com.cafe.erp.member.commute.MemberCommuteService;
 import com.cafe.erp.security.UserDTO;
 
@@ -105,9 +106,15 @@ public class MemberController {
 	    }
 		
 		
-		MemberCommuteDTO commuteDTO = new MemberCommuteDTO();
-		commuteDTO.setMemberId(memberId);
-		List<MemberCommuteDTO> commuteList = commuteService.attendanceList(commuteDTO);
+		MemberCommuteSearchDTO commuteSearchDTO = new MemberCommuteSearchDTO();
+		commuteSearchDTO.setMemberId(memberId);
+		
+		commuteSearchDTO.setPage(1L);
+		commuteSearchDTO.setPerPage(1000L); 
+		commuteSearchDTO.setStartNum(0L);
+		
+		
+		List<MemberCommuteDTO> commuteList = commuteService.attendanceList(commuteSearchDTO);
 		
 		for(MemberCommuteDTO dto : commuteList) {
 			String state = dto.getMemCommuteState();
@@ -166,6 +173,7 @@ public class MemberController {
 				} else {
 					checkout.put("title", "퇴근 (" + checkOutTime + ")");
 					checkout.put("className", "commute-leave-event");
+					
 					
 				}
                 checkout.put("start",checkOutDate );
@@ -285,9 +293,11 @@ public class MemberController {
 	
 
 	@GetMapping("AM_member_detail")
-	public String detail(MemberDTO memberDTO, Model model, @AuthenticationPrincipal UserDTO userDTO) throws Exception {
-		int targetMemberId = memberDTO.getMemberId();
+	public String detail(MemberDTO memberDTO, Model model, 
+	                     @AuthenticationPrincipal UserDTO userDTO, 
+	                     MemberCommuteSearchDTO memberCommuteSearchDTO) throws Exception {
 	    
+	    int targetMemberId = memberDTO.getMemberId();
 	    if (targetMemberId == 0) {
 	        targetMemberId = userDTO.getMember().getMemberId();
 	        memberDTO.setMemberId(targetMemberId); 
@@ -295,24 +305,48 @@ public class MemberController {
 
 	    MemberDTO member = memberService.detail(memberDTO);
 	    model.addAttribute("dto", member);
-	    
-	    List<MemberDTO> deptList = memberService.deptList();
-	    model.addAttribute("deptList", deptList);
-
-	    List<MemberDTO> positionList = memberService.positionList();
-	    model.addAttribute("positionList", positionList);
+	    model.addAttribute("deptList", memberService.deptList());
+	    model.addAttribute("positionList", memberService.positionList());
 
 	    if (member != null) {
-	        MemberCommuteDTO commuteDTO = new MemberCommuteDTO();
-	        commuteDTO.setMemberId(targetMemberId); 
-	        List<MemberCommuteDTO> attendanceList = commuteService.attendanceList(commuteDTO);
-	        model.addAttribute("attendanceList", attendanceList);
-
-	        List<MemberAttendanceDTO> vacationList = memberAttendanceDAO.attendanceList(targetMemberId);
-	        model.addAttribute("vacationList", vacationList);
+	        memberCommuteSearchDTO.setMemberId(targetMemberId);
 	        
-	        MemberLeaveStatsDTO stats = memberAttendanceDAO.selectLeaveStats(targetMemberId);
-	        model.addAttribute("stats", stats);
+	        String dateType = memberCommuteSearchDTO.getDateType();
+	        
+	        if (dateType == null || "month".equals(dateType) || dateType.isEmpty()) {
+	            String mDate = memberCommuteSearchDTO.getMonthDate();
+	            if (mDate == null || mDate.isEmpty()) {
+	                mDate = java.time.LocalDate.now().toString().substring(0, 7);
+	                memberCommuteSearchDTO.setMonthDate(mDate);
+	            }
+	            String[] parts = mDate.split("-");
+	            java.time.YearMonth yearMonth = java.time.YearMonth.of(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+	            memberCommuteSearchDTO.setStartDate(yearMonth.atDay(1).toString());
+	            memberCommuteSearchDTO.setEndDate(yearMonth.atEndOfMonth().toString());
+	            memberCommuteSearchDTO.setDateType("month");
+	        } 
+	        else if ("year".equals(dateType)) {
+	            String yDate = memberCommuteSearchDTO.getYearDate();
+	            if (yDate == null || yDate.isEmpty()) {
+	                yDate = String.valueOf(java.time.LocalDate.now().getYear());
+	                memberCommuteSearchDTO.setYearDate(yDate);
+	            }
+	            memberCommuteSearchDTO.setStartDate(yDate + "-01-01");
+	            memberCommuteSearchDTO.setEndDate(yDate + "-12-31");
+	        } 
+	        else if ("all".equals(dateType)) {
+	            memberCommuteSearchDTO.setStartDate(null);
+	            memberCommuteSearchDTO.setEndDate(null);
+	        }
+
+	        List<MemberCommuteDTO> attendanceList = commuteService.attendanceList(memberCommuteSearchDTO);
+	        
+	        model.addAttribute("attendanceList", attendanceList);
+	        
+	        model.addAttribute("pager", memberCommuteSearchDTO); 
+
+	        model.addAttribute("vacationList", memberAttendanceDAO.attendanceList(targetMemberId));
+	        model.addAttribute("stats", memberAttendanceDAO.selectLeaveStats(targetMemberId));
 	    }
 
 	    return "member/AM_member_detail";
