@@ -178,7 +178,7 @@ public class MemberController {
 	
 
 	@GetMapping("AM_group_chart")
-	public String chatList(Model model, @AuthenticationPrincipal UserDTO userDTO, MemberDTO memberDTO)
+	public String chatList(Model model, @AuthenticationPrincipal UserDTO userDTO, MemberSearchDTO memberSearchDTO)
 			throws Exception {
 		// 로그인 한 유저 확인
 		int memberId = userDTO.getMember().getMemberId();
@@ -193,7 +193,7 @@ public class MemberController {
 		List<Map<String, Object>> deptCount = memberService.deptMemberCount(startChart);
 
 		// 전체 활성 사원 수
-		int totalCount = memberService.countActiveMember(memberDTO);
+		int totalCount = memberService.countActiveMember(memberSearchDTO);
 
 		List<MemberDTO> startViewChart = memberService.chatList(startChart);
 
@@ -234,12 +234,21 @@ public class MemberController {
 	
 
 	@GetMapping("admin_member_list")
-	public String list(MemberDTO memberDTO, Model model) throws Exception {
-		List<MemberDTO> list = memberService.list(memberDTO);
+	public String list( Model model, MemberSearchDTO memberSearchDTO) throws Exception {
+		/* List<MemberDTO> list = memberService.list(memberDTO); */
+		List<MemberDTO> list = memberService.getMemberList(memberSearchDTO); 
+		
 		model.addAttribute("list", list);
+		model.addAttribute("pager", memberSearchDTO);
+		
+		List<MemberDTO> deptList = memberService.deptList();
+	    model.addAttribute("deptList", deptList);
+	    
+	    List<MemberDTO> positionList = memberService.positionList();
+	    model.addAttribute("positionList", positionList);
 
-		int totalCount = memberService.countAllMember(memberDTO); // 전체(퇴사 포함)
-		int activeCount = memberService.countActiveMember(memberDTO); // 재직자만
+		int totalCount = memberService.countAllMember(memberSearchDTO); // 전체(퇴사 포함)
+		int activeCount = memberService.countActiveMember(memberSearchDTO); // 재직자만
 
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("activeCount", activeCount);
