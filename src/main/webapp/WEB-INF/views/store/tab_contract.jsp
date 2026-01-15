@@ -136,9 +136,9 @@
 							            <label class="form-label small">로열티</label>
 							            <div class="input-group">
 							            	<span class="input-group-text">₩</span>
-							                <input type="number" class="form-control" placeholder="최소" id="searchRoyaltyMin" name="searchRoyaltyMin" value="${pager.searchRoyaltyMin}" >
+							                <input type="text" class="form-control price-input" oninput="format(this)" placeholder="최소" id="searchRoyaltyMin" name="searchRoyaltyMin" value="${pager.searchRoyaltyMinFormatted}" >
 							                <span class="input-group-text px-2">~</span>
-							                <input type="number" class="form-control" placeholder="최대" id="searchRoyaltyMax" name="searchRoyaltyMax" value="${pager.searchRoyaltyMax}" >
+							                <input type="text" class="form-control price-input" oninput="format(this)" placeholder="최대" id="searchRoyaltyMax" name="searchRoyaltyMax" value="${pager.searchRoyaltyMaxFormatted}" >
 							                <span class="input-group-text">원</span>
 							            </div>
 							        </div>
@@ -147,16 +147,24 @@
 							            <label class="form-label small">여신(보증금)</label>
 							            <div class="input-group">
 							            	<span class="input-group-text">₩</span>
-							                <input type="number" class="form-control" placeholder="최소" id="searchDepositMin" name="searchDepositMin" value="${pager.searchDepositMin}" > 
+							                <input type="text" class="form-control price-input" oninput="format(this)" placeholder="최소" id="searchDepositMin" name="searchDepositMin" value="${pager.searchDepositMinFormatted}" >
 							                <span class="input-group-text px-2">~</span>
-							                <input type="number" class="form-control" placeholder="최대" id="searchDepositMax" name="searchDepositMax" value="${pager.searchDepositMax}" >
+							                <input type="text" class="form-control price-input" oninput="format(this)" placeholder="최대" id="searchDepositMax" name="searchDepositMax" value="${pager.searchDepositMaxFormatted}" >
 							                <span class="input-group-text">원</span>
 							            </div>
 							        </div>
-				
-				                    <div class="col-12 col-md-12 d-flex align-items-end justify-content-end gap-2 mt-5">
-				                        <button class="btn btn-outline-secondary text-nowrap" type="button" onclick="resetSearchForm()"><i class="bx bx-refresh"></i> 초기화</button>
-				                        <button class="btn btn-primary text-nowrap" onclick="searchContract()"><i class="bx bx-search"></i> 조회</button>
+
+				                    <div class="col-12 col-md-12 d-flex align-items-center justify-content-between mt-5">
+										<div class="d-flex gap-2">
+											<button type="button" class="btn btn-outline-secondary btn-sm" onclick="addAmount(100000)">+ 10만원</button>
+											<button type="button" class="btn btn-outline-secondary btn-sm" onclick="addAmount(500000)">+ 50만원</button>
+											<button type="button" class="btn btn-outline-secondary btn-sm" onclick="addAmount(1000000)">+ 100만원</button>
+											<button type="button" class="btn btn-outline-secondary btn-sm" onclick="addAmount(5000000)">+ 500만원</button>
+										</div>
+										<div class="d-flex gap-2">
+											<button class="btn btn-outline-secondary text-nowrap" type="button" onclick="resetSearchForm()"><i class="bx bx-refresh"></i> 초기화</button>
+											<button class="btn btn-primary text-nowrap" onclick="searchContract()"><i class="bx bx-search"></i> 조회</button>
+										</div>
 				                    </div>
 				                </div>
 				            </form>
@@ -277,7 +285,7 @@
 												<label class="form-label" for="royalti">로얄티</label>
 												<div class="input-group">
 													<span class="input-group-text">₩</span>
-													<input type="number" id="royalti" class="form-control" placeholder="500000" />
+													<input type="text" id="royalti" class="form-control price-input" placeholder="500,000" oninput="format(this)" />
 													<span class="input-group-text">원</span>
 												</div>
 											</div>
@@ -285,8 +293,16 @@
 												<label class="form-label" for="deposit">여신 (보증금)</label>
 												<div class="input-group">
 													<span class="input-group-text">₩</span>
-													<input type="number" id="deposit" class="form-control" placeholder="50000000" />
+													<input type="text" id="deposit" class="form-control price-input" placeholder="50,000,000" oninput="format(this)" />
 													<span class="input-group-text">원</span>
+												</div>
+											</div>
+											<div class="col-12 d-flex justify-content-end">
+												<div class="d-flex gap-2">
+													<button type="button" class="btn btn-outline-secondary btn-sm" onclick="addAmount(100000)">+ 10만원</button>
+													<button type="button" class="btn btn-outline-secondary btn-sm" onclick="addAmount(500000)">+ 50만원</button>
+													<button type="button" class="btn btn-outline-secondary btn-sm" onclick="addAmount(1000000)">+ 100만원</button>
+													<button type="button" class="btn btn-outline-secondary btn-sm" onclick="addAmount(5000000)">+ 500만원</button>
 												</div>
 											</div>
 											<div class="col-12"><hr class="my-2"></div>
@@ -400,12 +416,12 @@
 			                                            <div class="col-md-6 ps-md-4 border-end">
 			                                                <label class="text-muted small d-block">로얄티</label>
 			                                                <span id="detailRoyalty" class="fw-semibold mode-view"></span>
-			                                                <input type="number" id="editRoyalty" class="form-control form-control-sm mode-edit d-none" placeholder="숫자만 입력" />
+			                                                <input type="text" id="editRoyalty" oninput="format(this)" class="form-control form-control-sm mode-edit d-none" placeholder="숫자만 입력" />
 			                                            </div>
 			                                            <div class="col-md-6 ps-md-4">
 			                                                <label class="text-muted small d-block">여신(보증금)</label>
 			                                                <span id="detailDeposit" class="fw-semibold mode-view"></span>
-			                                                <input type="number" id="editDeposit" class="form-control form-control-sm mode-edit d-none" placeholder="숫자만 입력" />
+			                                                <input type="text" id="editDeposit" oninput="format(this)" class="form-control form-control-sm mode-edit d-none" placeholder="숫자만 입력" />
 			                                            </div>
 			                                        </div>
 			                                    </div>
