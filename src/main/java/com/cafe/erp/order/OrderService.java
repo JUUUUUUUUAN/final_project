@@ -221,8 +221,7 @@ public class OrderService {
 	}
 
 	@Transactional
-	public void receiveOrder(List<OrderRequestDTO> orderNos, MemberDTO member) {
-		System.out.println("🔥 orderNos size = " + orderNos.size());
+	public void receiveOrder(List<OrderRequestDTO> orderNos) {
 		
 		List<OrderDetailDTO> orderDetailList;
 		StockInoutDTO stockInoutDTO = new StockInoutDTO();
@@ -266,12 +265,15 @@ public class OrderService {
 	            );
 	            orderDetailList = orderDAO.getStoreOrderDetail(orderNo.getOrderNo());
 	            // 3 입출고번호 생성(입출고타입, 창고번호, 본사발주번호, 가맹발주번호)
-	            int storeId = member.getMemberId();
+	            int storeId = orderDAO.getOrderStoreId(orderNo.getOrderNo());
+	            System.out.println(storeId);
 	            warehouseNo = orderDAO.findByWarehouseId(storeId);	            
 	            stockInoutDTO = settingStock(orderNo.getOrderType(), warehouseNo, orderNo.getOrderNo());
 	        }
-	        	orderDAO.insertOrderInOut(stockInoutDTO);
+		        orderDAO.insertOrderInOut(stockInoutDTO);
 	        	inputId = stockInoutDTO.getInputId();
+	        	System.out.println(stockInoutDTO.getHqOrderId());
+	        	System.out.println(stockInoutDTO.getStoreOrderId());
 
 	        // 4️ 상세 목록 조회 (이게 핵심)
 	        List<OrderDetailDTO> details =
@@ -306,8 +308,9 @@ public class OrderService {
 		} else {
 			stockInoutDTO.setInputType("IN");
 			stockInoutDTO.setWarehouseId(warehouseNo);
-			stockInoutDTO.setHqOrderId(orderNo);
+			stockInoutDTO.setStoreOrderId(orderNo);
 		}
+		
 		return stockInoutDTO;
 	}
 	public void cancelApprove(List<OrderRequestDTO> orderNos) {

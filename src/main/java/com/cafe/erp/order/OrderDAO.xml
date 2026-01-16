@@ -132,6 +132,10 @@
     		item_id as itemId
     		from order_store_detail where store_order_id = #{orderNo}
     	</select>
+    	<!-- 발주 목록 요청 -->
+    	<select id="getOrderStoreId" resultType="int">
+    		select store_id from order_store where store_order_id = #{orderNo} 
+    	</select>
     	
     	<!-- 발주 승인 처리 -->
     	<update id="approveHqOrder">
@@ -176,17 +180,13 @@
 			select * from order_store where store_order_id = #{orderNo}
 		</select>
 		<!-- 가맹주 창고 번호 찾기 -->
-		<select id="findByWarehouseId" resultType="Integer">
+		<select id="findByWarehouseId" parameterType="int" resultType="int">
 			select warehouse_id from order_warehouse where store_id = #{storeId}
 		</select>
 		<!-- 입출고 기록 -->
 		<insert id="insertOrderInOut" parameterType="StockInoutDTO" 
 		useGeneratedKeys="true" keyProperty="inputId">
-			INSERT INTO order_in_out (
-        input_type,
-        warehouse_id,
-        hq_order_id,
-        store_order_id
-    )  values(#{inputType}, #{warehouseId}, #{hqOrderId}, #{storeOrderId})
+			INSERT INTO order_in_out
+  			values(NULL, #{inputType}, #{warehouseId}, #{hqOrderId} , #{storeOrderId})
 		</insert>
     </mapper>
