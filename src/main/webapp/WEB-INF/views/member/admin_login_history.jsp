@@ -118,8 +118,8 @@
                         <c:forEach items="${historyList}" var="log">
                             <tr>
                                 <td>
-                                    <fmt:parseDate value="${log.memLogHisCreatedTime}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate" type="both" />
-                                    <fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm:ss" />
+                                    <fmt:parseDate value="${log.memLogHisCreatedTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both" />
+                                    <fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm" />
                                 </td>
 
                                 <td>

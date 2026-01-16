@@ -783,8 +783,8 @@
                     </div>
                     <div class="row">
                         <div class="col mb-3">
-                            <label for="editNote" class="form-label">수정 사유 / 비고</label>
-                            <input type="text" id="editNote" class="form-control" placeholder="수정 사유를 입력하세요." />
+                            <label for="editNote" class="form-label"><!-- 수정 사유 / 비고 --></label>
+                            <input type="hidden" id="editNote" class="form-control" placeholder="수정 사유를 입력하세요." />
                         </div>
                     </div>
                     
