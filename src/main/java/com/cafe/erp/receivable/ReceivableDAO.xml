@@ -704,6 +704,7 @@
 	  ) t
 	</select>
 
+
 	<select id="selectHqPayableTotalSummaryByMonth"
 	        parameterType="com.cafe.erp.receivable.hq.HqPayableSearchDTO"
 	        resultType="com.cafe.erp.receivable.hq.HqPayableTotalSummaryDTO">
