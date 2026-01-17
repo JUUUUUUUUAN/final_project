@@ -73,12 +73,11 @@ public interface ReceivableDAO {
     public boolean existsByStoreOrderId(String storeOrderId);
     // 발주 공급가액 조회 (본사 - 가맹점)
     public Integer selectStoreOrderSupplyAmount(String storeOrderId);
-    // 발주테이블 상태값이 400이면 채권생성 
+    // 발주테이블 상태값이 400이면 채권생성
     public void insertReceivableForStoreOrder(String storeOrderId, int supplyAmount );
 
     
     // 거래처 코드
-    
     public List<HqPayableSummaryDTO> selectHqPayableListByMonth(HqPayableSearchDTO dto);
 
 	public Long selectHqPayableCountByMonth(HqPayableSearchDTO dto);

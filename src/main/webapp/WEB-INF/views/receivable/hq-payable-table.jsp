@@ -72,6 +72,7 @@
 	    </tr>
 	  </c:if>
 	</tbody>
+	
 </table>
 
  <jsp:include page="/WEB-INF/views/common/pagination.jsp" />

@@ -162,7 +162,6 @@ public class OrderController {
 	@ResponseBody
 	public String receive(@RequestBody List<OrderRequestDTO> orderNos,@AuthenticationPrincipal UserDTO userDTO) {
 		MemberDTO member = userDTO.getMember();
-		System.out.println("🔥 receive controller 진입");
 		orderService.receiveOrder(orderNos, member);
 		return "redirect:/order/receive";
 	}
