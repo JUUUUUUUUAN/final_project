@@ -3,6 +3,7 @@ package com.cafe.erp.receivable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,14 +14,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cafe.erp.receivable.detail.ReceivableAmountSummaryDTO;
-import com.cafe.erp.receivable.detail.ReceivableItemDTO;
 import com.cafe.erp.receivable.detail.ReceivableOrderSummaryDTO;
 import com.cafe.erp.receivable.detail.ReceivableRoyaltyDTO;
 import com.cafe.erp.receivable.detail.ReceivableTransactionDTO;
+import com.cafe.erp.receivable.hq.HqPayablePaymentDTO;
+import com.cafe.erp.receivable.hq.HqPayableReceivableDTO;
 import com.cafe.erp.receivable.hq.HqPayableSearchDTO;
 import com.cafe.erp.receivable.hq.HqPayableSummaryDTO;
 import com.cafe.erp.receivable.hq.HqPayableTotalSummaryDTO;
+import com.cafe.erp.security.UserDTO;
 import com.cafe.erp.util.Pager;
+import com.cafe.erp.vendor.VendorDTO;
 
 import jakarta.validation.Valid;
 
@@ -73,18 +77,20 @@ public class ReceivableController {
 		model.addAttribute("receivableTransactionDTO", receivableTransactionDTO);
 	}
 	
+	
+	
 	@GetMapping("vendor")
-	public String index() {
+	public String receivableVendor() {
 		return "receivable/receivable-vendor";
 	}
-	
+
 	@PostMapping("vendor/search")
 	public String hqPayableSearch(HqPayableSearchDTO dto, Model model) {
+		
 		List<HqPayableSummaryDTO> list = service.hqPayableSearchList(dto);
 
 		model.addAttribute("list", list);
 		model.addAttribute("pager", dto.getPager());
-
 		return "receivable/hq-payable-table";
 	}
 
@@ -93,6 +99,28 @@ public class ReceivableController {
 	public HqPayableTotalSummaryDTO hqPayableSummary(HqPayableSearchDTO dto) {
 		return service.getHqPayableSummary(dto);
 	}
+	
+	// 지급 폼 채권 목록 조회
+	@GetMapping("vendor/receivables")
+	@ResponseBody
+	public List<HqPayableReceivableDTO> getVendorReceivables(
+	        @RequestParam Integer vendorId,
+	        @RequestParam String baseMonth
+	) {
+	    return service.getVendorReceivableList(vendorId, baseMonth);
+	}
+	
+	
+	
+	@PostMapping("/hq/pay")
+	@ResponseBody	
+	public void payHqReceivable(
+			HqPayablePaymentDTO dto,
+			@AuthenticationPrincipal UserDTO userDTO
+			) {
+		service.payHqReceivable(dto,userDTO);
+	}
+
 	
 	
 }

@@ -10,6 +10,7 @@ import lombok.ToString;
 @ToString
 public class ReceivableSummaryDTO {
 	
+	private Integer vendorId;
 	// 조회 시 채권 리스트 출력
 	private Long storeId;
     private String storeName;

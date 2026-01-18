@@ -12,5 +12,6 @@ public class OrderItemRequestDTO {
 	private Integer itemQuantity;
 	private Integer itemSupplyPrice;
 	private Boolean itemAutoOrder;
+	private Integer vendorId;
 	private Integer vendorCode;
 }

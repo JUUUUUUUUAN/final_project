@@ -249,23 +249,23 @@
 				  <!-- ================= 지급 이력 ================= -->
 				  <div class="card mb-4">
 			  		<div class="card-header d-flex justify-content-between align-items-center">
-					    <h5 class="mb-0">지급 이력</h5>
+					    <h5 class="mb-0">수금 이력</h5>
 					    <button
 					      type="button"
 					      class="btn btn-sm btn-outline-secondary"
 					      data-bs-toggle="modal"
 					      data-bs-target="#paymentModal">
-					      + 지급
+					      + 수금
 					    </button>
 					  </div>
 				    <div class="table-responsive text-nowrap">
 				      <table class="table">
 				        <thead>
 				          <tr>
-				            <th class="text-first">지급일</th>
+				            <th class="text-first">수금일</th>
 				            <th class="text-first">담당자명</th>
-				            <th class="text-center">지급 금액</th>
-				            <th class="text-center">지급 구분</th>
+				            <th class="text-center">수금 금액</th>
+				            <th class="text-center">수금 구분</th>
 				            <th class="text-center">비고</th>
 				          </tr>
 				        </thead>
@@ -337,13 +337,13 @@
 				            </td>
 				          </tr>
 				          <tr>
-				            <th>지급 금액</th>
+				            <th>수금 금액</th>
 				            <td class="text-end">
 				            	<fmt:formatNumber value="${receivableAmountSummaryDTO.paidAmount}" type="number"/>
 				            </td>
 				          </tr>
 				          <tr>
-				            <th class="text-danger">미지급 금액</th>
+				            <th class="text-danger">미수금 금액</th>
 				            <td class="text-end text-danger fw-bold">
 				            	<fmt:formatNumber value="${receivableAmountSummaryDTO.unpaidAmount}" type="number"/>
 				            </td>
@@ -452,7 +452,7 @@
 	
 	      <!-- 모달 헤더 -->
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="paymentModalLabel">지급 등록</h5>
+	        <h5 class="modal-title" id="paymentModalLabel">수금 등록</h5>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 	      </div>
 	
@@ -471,7 +471,7 @@
 			
 			  <!-- 지급 구분 (자동) -->
 			  <div class="mb-3">
-			    <label class="form-label">지급 구분</label>
+			    <label class="form-label">수금 구분</label>
 			    <input
 			      type="text"
 			      class="form-control"
@@ -493,7 +493,7 @@
 			      />
 			    </div>
 			    <div class="col-6">
-			      <label class="form-label">지급 금액</label>
+			      <label class="form-label">수금 금액</label>
 			      <input
 			        type="text"
 			        class="form-control text-end"
@@ -540,7 +540,7 @@
 	          class="btn btn-primary"
 	          id="paymentSaveBtn"
 	        >
-	          지급
+	          수금
 	        </button>
 	      </div>
 	

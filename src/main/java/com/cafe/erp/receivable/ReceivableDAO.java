@@ -4,6 +4,7 @@ import java.util.List;
 
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.cafe.erp.receivable.detail.ReceivableAmountSummaryDTO;
 import com.cafe.erp.receivable.detail.ReceivableAvailableDTO;
@@ -12,9 +13,13 @@ import com.cafe.erp.receivable.detail.ReceivableItemDTO;
 import com.cafe.erp.receivable.detail.ReceivableOrderSummaryDTO;
 import com.cafe.erp.receivable.detail.ReceivableRoyaltyDTO;
 import com.cafe.erp.receivable.detail.ReceivableTransactionDTO;
+import com.cafe.erp.receivable.hq.HqPayablePaymentDTO;
+import com.cafe.erp.receivable.hq.HqPayableReceivableDTO;
 import com.cafe.erp.receivable.hq.HqPayableSearchDTO;
 import com.cafe.erp.receivable.hq.HqPayableSummaryDTO;
 import com.cafe.erp.receivable.hq.HqPayableTotalSummaryDTO;
+import com.cafe.erp.receivable.hq.ReceivableRemainDTO;
+import com.cafe.erp.vendor.VendorDTO;
 
 @Mapper
 public interface ReceivableDAO {
@@ -72,21 +77,37 @@ public interface ReceivableDAO {
     public boolean existsByStoreOrderId(String storeOrderId);
     // 발주 공급가액 조회 (본사 - 가맹점)
     public Integer selectStoreOrderSupplyAmount(String storeOrderId);
-    // 발주테이블 상태값이 400이면 채권생성 
+    // 발주테이블 상태값이 400이면 채권생성
     public void insertReceivableForStoreOrder(String storeOrderId, int supplyAmount );
 
     
     // 거래처 코드
-    
-	// 월 기준 목록/카운트
-	List<HqPayableSummaryDTO> selectHqPayableListByMonth(HqPayableSearchDTO dto);
-	Long selectHqPayableCountByMonth(HqPayableSearchDTO dto);
-	HqPayableTotalSummaryDTO selectHqPayableTotalSummaryByMonth(HqPayableSearchDTO dto);
+    public List<HqPayableSummaryDTO> selectHqPayableList(HqPayableSearchDTO dto);
 
-	// 전체(월 조건 없음) 목록/카운트
-	List<HqPayableSummaryDTO> selectHqPayableListAll(HqPayableSearchDTO dto);
-	Long selectHqPayableCountAll(HqPayableSearchDTO dto);
-	HqPayableTotalSummaryDTO selectHqPayableTotalSummaryAll(HqPayableSearchDTO dto);
+	public Long selectHqPayableCountByMonth(HqPayableSearchDTO dto);
+
+	public HqPayableTotalSummaryDTO selectHqPayableTotalSummaryByMonth(HqPayableSearchDTO dto);
+	// 지급 처리 폼 거래처 채권 목록 조회
+	public List<HqPayableReceivableDTO> selectVendorReceivableList(
+	        @Param("vendorId") Integer vendorId,
+	        @Param("baseMonth") String baseMonth
+	);
+	
+	// 4) 지급 insert
+	void insertHqPayment(ReceivableCollectionRequestDTO dto);
+	
+	public void payHqReceivable(HqPayablePaymentDTO dto);
+
+    // 단일 채권 남은 금액 조회
+    Integer selectReceivableRemainAmount(
+            @Param("receivableId") String receivableId
+    );
+
+    
+    
+    
+    
+    
     
     
     

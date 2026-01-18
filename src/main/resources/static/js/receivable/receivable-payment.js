@@ -176,7 +176,7 @@ function onSavePayment() {
     document.querySelector('textarea[name="transactionMemo"]').value;
 
   if (!receivableId || amount <= 0) {
-    alert('채권과 지급 금액을 확인해주세요.');
+    alert('채권과 수금 금액을 확인해주세요.');
     return;
   }
 
@@ -199,7 +199,7 @@ function onSavePayment() {
       return res.text();
     })
     .then(msg => {
-      alert(msg || '지급이 정상적으로 처리되었습니다.');
+      alert(msg || '수금이 정상적으로 처리되었습니다.');
 
       // 모달 닫기
       const modalEl = document.getElementById('paymentModal');
@@ -210,8 +210,8 @@ function onSavePayment() {
     })
     .catch(err => {
       console.error(err);
-      alert('지급 처리 중 오류가 발생했습니다.');
+      alert('수금 처리 중 오류가 발생했습니다.');
       saveBtn.disabled = false;
-      saveBtn.innerText = '지급';
+      saveBtn.innerText = '수금';
     });
 }
