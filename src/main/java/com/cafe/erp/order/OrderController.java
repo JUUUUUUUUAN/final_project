@@ -19,6 +19,7 @@ import com.cafe.erp.item.ItemDTO;
 import com.cafe.erp.item.ItemService;
 import com.cafe.erp.member.MemberDTO;
 import com.cafe.erp.security.UserDTO;
+import com.cafe.erp.stock.StoreInventoryDTO;
 import com.cafe.erp.store.StoreService;
 import com.cafe.erp.vendor.VendorService;
 
@@ -255,5 +256,19 @@ public class OrderController {
 		return "redirect:/order/release";
 	}
 	
-	
+	@GetMapping("/store/inventory")
+	@ResponseBody
+	public List<StoreInventoryDTO> getStoreInventory(
+	        @AuthenticationPrincipal UserDTO userDTO
+	) {
+	    MemberDTO member = userDTO.getMember();
+
+	    // 가맹점만 허용
+	    if (String.valueOf(member.getMemberId()).charAt(0) != '2') {
+	        throw new IllegalStateException("가맹점만 접근 가능");
+	    }
+
+	    // 가맹 재고 목록 조회
+	    return orderService.getStoreInventory(member.getMemberId());
+	}
 }

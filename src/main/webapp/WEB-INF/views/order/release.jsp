@@ -51,6 +51,7 @@
   <!-- Helpers -->
   <script src="/vendor/js/helpers.js"></script>
   <script src="/js/config.js"></script>
+  <base href="${pageContext.request.contextPath}/">
 </head>
 
 <body data-user-type="${fn:startsWith(member.memberId, '1') ? 'HQ' : 'STORE'}">
@@ -105,7 +106,8 @@
                               </c:if>
 
                               <c:if test="${fn:startsWith(member.memberId, '2')}">
-                                <button class="btn btn-success btn-sm" id="requestReleaseBtn">출고요청</button>
+                                <button class="btn btn-success btn-sm" id="requestReleaseBtn" data-bs-toggle="modal"
+        data-bs-target="#releaseModal">출고요청</button>
                               </c:if>
                             </div>
                           </div>
@@ -248,6 +250,74 @@
     </div>
     <!-- / Layout page -->
   </div>
+  
+  <!-- 가맹 출고 모달 -->
+  <div class="modal fade" id="releaseModal" tabindex="-1">
+	  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+	    <div class="modal-content">
+	
+	      <div class="modal-header">
+	        <h5 class="modal-title">가맹출고 요청</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+	      </div>
+	
+	      <div class="modal-body">
+	
+	        <div class="d-flex justify-content-end mb-2">
+	          <button class="btn btn-outline-primary btn-sm" id="btnAddItem">
+	            물품등록
+	          </button>
+	        </div>
+	
+	        <table class="table table-bordered text-center align-middle">
+	          <thead class="table-light">
+	            <tr>
+	              <th>물품명</th>
+	              <th style="width:120px">수량</th>
+	            </tr>
+	          </thead>
+	          <tbody id="selectedItemList">
+	            <tr class="empty-row">
+	              <td colspan="2" class="text-muted">
+	                등록된 물품이 없습니다
+	              </td>
+	            </tr>
+	          </tbody>
+	        </table>
+	
+	      </div>
+	
+	      <div class="modal-footer">
+	        <button class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+	        <button class="btn btn-primary" onclick="submitReleaseRequest()">출고요청</button>
+	      </div>
+	
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="itemModal" tabindex="-1">
+	  <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+	    <div class="modal-content">
+	
+	      <div class="modal-header">
+	        <h5 class="modal-title">물품 선택</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+	      </div>
+	
+	      <div class="modal-body">
+	        <ul class="list-group" id="inventoryList">
+	          <!-- JS로 렌더링 -->
+	        </ul>
+	      </div>
+	
+	      <div class="modal-footer">
+	        <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	      </div>
+	
+	    </div>
+	  </div>
+	</div>
 
   <!-- Overlay -->
   <div class="layout-overlay layout-menu-toggle"></div>
@@ -268,8 +338,7 @@
 <script src="/js/main.js"></script>
 
 <!-- Page JS -->
-<script src="/js/order/orderApprove.js"></script>
-<script src="/js/order/orderRelease.js"></script>
+<script src="/js/order/StoreStockRelease.js"></script>
 
 </body>
 </html>

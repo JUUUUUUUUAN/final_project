@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import com.cafe.erp.item.ItemDTO;
 import com.cafe.erp.member.MemberDTO;
 import com.cafe.erp.stock.StockInoutDTO;
+import com.cafe.erp.stock.StoreInventoryDTO;
 
 @Mapper
 public interface OrderDAO {
@@ -25,7 +26,7 @@ public interface OrderDAO {
 	public void insertStoreOrderItemDetail(OrderDetailDTO orderDetailDTO);
 	
 	public List<OrderDTO> listHq(@Param("statuses") List<Integer> statuses,@Param("member") MemberDTO member);
-	public List<OrderDTO> listStore(@Param("statuses") List<Integer> statuses,@Param("member") MemberDTO member);
+	public List<OrderDTO> listStore(@Param("statuses") List<Integer> statuses,@Param("memberId") MemberDTO member);
 
 	public List<OrderDetailDTO> getHqOrderDetail(@Param("orderNo") String orderNo);
 	public List<OrderDetailDTO> getStoreOrderDetail(@Param("orderNo") String orderNo);
@@ -63,9 +64,10 @@ public interface OrderDAO {
 	public void updateReceiveStatusByStoreOrder(@Param("orderNo") String orderNo);
 	public void updateCancelReceiveStatusByStoreOrder(@Param("orderNo") String orderNo);
 
-	public void releaseByHq(List<OrderDetailDTO> releaseItemList);
+	public int releaseByHq(OrderDetailDTO releaseItem);
 	
 	// 입고 변경 시 order_hq_vendor 테이블에 insert 로직
 	void insertOrderHqVendorByDto(OrderHqVendorDTO dto);
 	
+	public List<StoreInventoryDTO> selectStoreInventory(@Param("warehouseId") Integer warehouseId);
 }

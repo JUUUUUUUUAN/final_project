@@ -41,4 +41,19 @@
 		    NOW()
 		  )
 		</insert>
+		
+		<!-- 창고번호 조회 -->
+		<select id="getStoreIdBymemberId" resultType="Integer">
+		  select store_id from store where member_id = #{memberId}
+		</select>
+		<select id="getWarehouseIdByStoreId" resultType="Integer">
+		  select warehouse_id from order_warehouse where store_id = #{storeId}
+		</select>
+		<select id="getStockByWarehouseId" resultType="StockDTO">
+		  select *
+		  from order_stock os
+		  join vendor_item vi on os.item_id = vi.item_id 
+		  where warehouse_id = #{warehouseId}
+		</select>
+
     </mapper>

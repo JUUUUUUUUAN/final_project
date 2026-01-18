@@ -17,15 +17,20 @@ import com.cafe.erp.notification.service.NotificationService;
 import com.cafe.erp.order.event.OrderReceivedEvent;
 import com.cafe.erp.receivable.ReceivableDAO;
 import com.cafe.erp.security.UserDTO;
+import com.cafe.erp.stock.StockDAO;
 import com.cafe.erp.stock.StockDTO;
 import com.cafe.erp.stock.StockInoutDTO;
 import com.cafe.erp.stock.StockService;
+import com.cafe.erp.stock.StoreInventoryDTO;
 
 @Service
 public class OrderService {
 	
 	@Autowired
 	private OrderDAO orderDAO;
+	
+	@Autowired
+	private StockDAO stockDAO;
 	
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
@@ -263,8 +268,10 @@ public class OrderService {
 				orderDAO.receiveHqOrder(orderNo.getOrderNo());							
 			} else if("STORE".equals(orderNo.getOrderType())){
 				OrderDTO storeOrder = orderDAO.isStoreAlreadyReceived(orderNo.getOrderNo());
-				if (storeOrder != null && (storeOrder.getHqOrderStatus() == 400 || storeOrder.getHqOrderStatus() == 330)) {
-					continue;
+				if (storeOrder != null && storeOrder.getHqOrderStatus() == 400 ) {
+					throw new IllegalArgumentException("이미 입고된 발주입니다.");
+				} else if(storeOrder != null && storeOrder.getHqOrderStatus() == 330) {
+					throw new IllegalArgumentException("본사 출고 대기중입니다.");
 				}
 				orderDAO.receiveStoreOrder(orderNo.getOrderNo());							
 			}
@@ -278,7 +285,7 @@ public class OrderService {
 	            orderDetailList = orderDAO.getHqOrderDetail(orderNo.getOrderNo());
 	            // order_hq_vendor 테이블에 발주 삽입 로직
 	            Map<Integer, OrderHqVendorDTO> vendorMap = new HashMap<>();
-
+	            
 	            for (OrderDetailDTO d : orderDetailList) {
 
 	                int vendorId = d.getVendorId();           // 반드시 있어야 함
@@ -330,6 +337,12 @@ public class OrderService {
 	            orderDetailList = orderDAO.getStoreOrderDetail(orderNo.getOrderNo());
 	            // 3 입출고번호 생성(입출고타입, 창고번호, 본사발주번호, 가맹발주번호)
 	            int storeId = orderDAO.getOrderStoreId(orderNo.getOrderNo());
+	            
+	            int supplyAmount = 0;
+	            for (OrderDetailDTO d : orderDetailList) {
+	            	supplyAmount += d.getHqOrderAmount();
+	            }
+	            receivableDAO.insertReceivableForStoreOrder(orderNo.getOrderNo(), supplyAmount);
 	            System.out.println(storeId);
 	            warehouseNo = orderDAO.findByWarehouseId(storeId);	            
 	            stockInoutDTO = settingStock(orderNo.getOrderType(), warehouseNo, orderNo.getOrderNo());
@@ -384,10 +397,13 @@ public class OrderService {
 				orderDAO.cancelApproveHqOrder(orderNo.getOrderNo());							
 			} else if("STORE".equals(orderNo.getOrderType())){
 				OrderDTO storeOrder = orderDAO.isStoreAlreadyReceived(orderNo.getOrderNo());
-				if(storeOrder != null && storeOrder.getHqOrderStatus() == 350 ) {
-					continue;
+				if(storeOrder == null) {
+					throw new IllegalArgumentException("취소할 발주건이 없습니다.");
+				} else if(storeOrder.getHqOrderStatus() == 350) {
+					throw new IllegalArgumentException("이미 본사 출고 완료상태입니다.");
+				} else if(storeOrder.getHqOrderStatus() == 330) {
+					orderDAO.cancelApproveStoreOrder(orderNo.getOrderNo());							
 				}
-				orderDAO.cancelApproveStoreOrder(orderNo.getOrderNo());							
 			}
 		}
 	}
@@ -422,10 +438,26 @@ public class OrderService {
 	@Transactional
 	public void releaseByHq(List<OrderRequestDTO> orderNos) {
 		for (OrderRequestDTO orderNo : orderNos) {
-			 List<OrderDetailDTO> releaseItemList = orderDAO.getStoreOrderDetail(orderNo.getOrderNo());
-			orderDAO.releaseByHq(releaseItemList);
+			
+			List<OrderDetailDTO> releaseItemList = orderDAO.getStoreOrderDetail(orderNo.getOrderNo());
+			for (OrderDetailDTO d : releaseItemList) {
+
+	            int updated = orderDAO.releaseByHq(d);
+
+	            if (updated == 0) {
+	                throw new IllegalStateException(
+	                    "재고 부족으로 출고 불가 (itemId=" + d.getItemId() + ")"
+	                );
+	            }
+	        }
 		}
 	}
 	
-
+	// 재고 사용 요청
+	// 보유중인 재고 목록 가져오기
+	public List<StoreInventoryDTO> getStoreInventory(Integer memberId) {
+		int storeId = stockDAO.getStoreIdBymemberId(memberId);
+		int warehouseId = stockDAO.getWarehouseIdByStoreId(storeId);
+        return stockDAO.selectStoreInventory(warehouseId);
+    }
 }

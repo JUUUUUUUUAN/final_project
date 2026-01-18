@@ -264,13 +264,11 @@
     	</update>
     	<!-- 본사 재고 출고 반영 -->
     	<update id="releaseByHq" parameterType="OrderDetailDTO">
-    		<foreach collection="list" item="item" separator=";">
 		    UPDATE order_stock
-		    SET stock_quantity = stock_quantity - #{item.hqOrderQty}
-		    WHERE item_id= #{item.itemId}
-		      AND warehouse_id = 11
-		      AND stock_quantity >= #{item.hqOrderQty}
-		  </foreach>
+		    SET stock_quantity = stock_quantity - #{hqOrderQty}
+		    WHERE item_id = #{itemId}
+		    AND warehouse_id = 11
+		    AND stock_quantity >= #{hqOrderQty}
     	</update>
     	
     	<!-- 입고 변경 시 order_hq_store에 insert 로직 -->
@@ -292,8 +290,20 @@
 		    )
 		</insert>
     	
-    	
-    	
-    	
+    	<select id="selectStoreInventory"
+            parameterType="int"
+            resultType="StoreInventoryDTO">
+	        SELECT
+	            vi.item_id     AS itemId,
+		        vi.item_name   AS itemName,
+		        s.stock_quantity   AS stockQuantity
+		    FROM order_stock s
+		    JOIN vendor_item vi
+		      ON s.item_id = vi.item_id
+		    WHERE s.warehouse_id = #{warehouse_id}
+		      AND s.stock_quantity> 0
+		    ORDER BY vi.item_name;
+
+    	</select>
     	
     </mapper>
