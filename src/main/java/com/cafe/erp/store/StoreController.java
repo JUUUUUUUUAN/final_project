@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cafe.erp.security.UserDTO;
+import com.cafe.erp.store.voc.VocDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,6 +47,20 @@ public class StoreController {
 		return "store/tab_store";
 	}
 
+	@PreAuthorize("hasRole('DEPT_SALES')")
+	@GetMapping("my-list")
+	public String myStoreList(StoreSearchDTO searchDTO, Model model, @AuthenticationPrincipal UserDTO user) throws Exception {
+		searchDTO.setManagerId(user.getMember().getMemberId());
+
+		List<StoreDTO> storeList = storeService.list(searchDTO);
+
+		model.addAttribute("list", storeList);
+		model.addAttribute("kakaoKey", kakaoKey);
+		model.addAttribute("pager", searchDTO);
+
+		return "store/tab_store";
+	}
+
 	@PreAuthorize("hasAnyRole('DEPT_SALES', 'EXEC', 'MASTER')")
 	@PostMapping("add") 
 	@ResponseBody
@@ -65,12 +80,32 @@ public class StoreController {
 		return response; 
 	}
 
+	@PreAuthorize("hasRole('DEPT_SALES')")
+	@GetMapping("my-downloadExcel")
+	public void myStoreDownloadExcel(StoreSearchDTO searchDTO, @AuthenticationPrincipal UserDTO user, HttpServletResponse response) throws Exception {
+		searchDTO.setManagerId(user.getMember().getMemberId());
+
+		List<StoreDTO> list = storeService.excelList(searchDTO);
+		String[] headers = {"ID", "가맹점명", "점주ID", "점주명", "주소", "상태", "오픈시간", "마감시간"};
+		
+		ExcelUtil.download(list, headers, "가맹점 목록", response, (row, dto) -> {
+			row.createCell(0).setCellValue(dto.getStoreId());
+			row.createCell(1).setCellValue(dto.getStoreName());
+			row.createCell(2).setCellValue(dto.getMemberId());
+			row.createCell(3).setCellValue(dto.getMemName());
+			row.createCell(4).setCellValue(dto.getStoreAddress());
+			row.createCell(5).setCellValue(dto.getStoreStatus());
+			row.createCell(6).setCellValue(dto.getStoreStartTime() != null ? dto.getStoreStartTime().toString() : "");
+			row.createCell(7).setCellValue(dto.getStoreCloseTime() != null ? dto.getStoreCloseTime().toString() : "");
+		});
+	}
+
 	@PreAuthorize("hasRole('HQ')")
 	@GetMapping("downloadExcel")
 	public void downloadExcel(StoreSearchDTO searchDTO, HttpServletResponse response) throws Exception {
 		List<StoreDTO> list = storeService.excelList(searchDTO);
 		String[] headers = {"ID", "가맹점명", "점주ID", "점주명", "주소", "상태", "오픈시간", "마감시간"};
-		
+
 		ExcelUtil.download(list, headers, "가맹점 목록", response, (row, dto) -> {
 			row.createCell(0).setCellValue(dto.getStoreId());
 			row.createCell(1).setCellValue(dto.getStoreName());
@@ -127,13 +162,24 @@ public class StoreController {
 		return response;
 	}
 
-	@PreAuthorize("hasAnyRole('')")
+	@PreAuthorize("hasAnyRole('DEPT_SALES', 'EXEC', 'MASTER')")
 	@PostMapping("updateStatus")
 	@ResponseBody
-	public Map<String, Object> updateStatus(@RequestBody StoreDTO storeDTO) throws Exception {
+	public Map<String, Object> updateStatus(@RequestBody StoreDTO storeDTO, @AuthenticationPrincipal UserDTO user) throws Exception {
+		boolean isSALES = user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_DEPT_SALES"));
+		Map<String, Object> response = new HashMap<>();
+
+		if (isSALES) {
+			boolean isManager = storeService.isCurrentManager(storeDTO.getStoreId(), user.getMember().getMemberId());
+			if (!isManager) {
+				response.put("status", "error");
+				response.put("message", "해당 가맹점의 담당자가 아닙니다.");
+
+				return response;
+			}
+		}
 		int result = storeService.updateInfo(storeDTO);
 
-		Map<String, Object> response = new HashMap<>();
 		if (result > 0) {
 			response.put("status", "success");
 		} else {

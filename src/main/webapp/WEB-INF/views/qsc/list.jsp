@@ -86,6 +86,11 @@
 						<li class="nav-item">
 							<a href="/store/qsc/list" class="nav-link active"><i class="bx bx-task me-1"></i> QSC</a>
 						</li>
+						<sec:authorize access="hasAnyRole('DEPT_SALES')">
+							<li class="nav-item">
+								<a href="/store/qsc/my-list" class="nav-link"><i class="bx bx-user-check"></i> 담당 가맹점</a>
+							</li>
+						</sec:authorize>
                         <li class="nav-item">
                         	<a href="/store/qsc/admin/question" class="nav-link active"><i class="bx bx-list-check me-1"></i> 항목</a>
                         </li>
@@ -95,7 +100,7 @@
                 <div id="tab-content-area">
                    	<div class="card shadow-none border bg-white mb-4">
 						<div class="card-body py-3 px-3">
-					    	<form id="qscSearchForm" method="get" action="/store/qsc/list">
+					    	<form id="qscSearchForm" method="get" action="${baseUrl}">
 					    		<input type="hidden" name="page" id="page" value="1">
 								<input type="hidden" name="perPage" id="hiddenPerPage" value="${pager.perPage}">
 					      		<div class="row g-3">

@@ -14,16 +14,16 @@ public class CustomErrorController implements ErrorController {
     public String handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
-//        if (status != null) {
-//            int statusCode = Integer.parseInt(status.toString());
-//
-//            switch (statusCode) {
-//                case 403: return "error/403";
-//                case 404: return "error/404";
-//                case 500: return "error/500";
-//                default: break;
-//            }
-//        }
+        if (status != null) {
+            int statusCode = Integer.parseInt(status.toString());
+
+            switch (statusCode) {
+                case 403: return "error/403";
+                case 404: return "error/404";
+                case 500: return "error/500";
+                default: break;
+            }
+        }
 
         return "error/common";
     }
