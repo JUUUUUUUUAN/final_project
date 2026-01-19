@@ -93,5 +93,12 @@ public class StockController {
 	    return "redirect:/order/release";
 	}
 	
+	@GetMapping("/stock/release")
+	@ResponseBody
+	public List<StockReleaseItemDTO> releaseDetail(
+	        @RequestParam Integer inputId
+	) {
+	    return stockService.getStoreReleaseDetail(inputId);
+	}
 	
 }

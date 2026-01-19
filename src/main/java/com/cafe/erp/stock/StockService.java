@@ -85,7 +85,7 @@ public class StockService {
 	    	StockDTO stockdto = new StockDTO();
 	    	stockdto.setWarehouseId(warehouseId);
 	    	stockdto.setItemId(item.getItemId());
-	        int currentStock = stockDAO.existsStock(stockdto);
+	    	Integer currentStock = stockDAO.existsStockForRelease(stockdto);
 
 	        if (currentStock < item.getQuantity()) {
 	            throw new IllegalStateException(

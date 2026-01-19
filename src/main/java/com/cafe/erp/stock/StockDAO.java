@@ -15,6 +15,7 @@ public interface StockDAO {
 	public void insertStockHistory(StockDTO stockDTO);
 	
 	public int existsStock(StockDTO stockDTO);
+	public int existsStockForRelease(StockDTO stockDTO);
 	
 	public void updateStockQuantity(StockDTO stockDTO);
 	

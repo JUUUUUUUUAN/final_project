@@ -121,19 +121,17 @@
                                     ${st.count}
                                     </td>
                                     <td>${r.inputId}</td>
-                                    <td>
-                                      <c:choose>
-                                        <c:when test="${r.releaseRelease == 'use'}">
-                                          <span class="badge bg-label-primary">재고사용</span>
-                                        </c:when>
-                                        <c:when test="${r.releaseRelease == 'faulty'}">
-                                          <span class="badge bg-label-danger">상품불량</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                          <span class="badge bg-label-danger">${r.releaseRelease}</span>
-                                        </c:otherwise>
-                                      </c:choose>
-                                    </td>
+									<td>
+									  <c:choose>
+									    <c:when test="${empty r.releaseReason}">
+									      <span class="badge bg-label-primary">재고사용</span>
+									    </c:when>
+									
+									    <c:when test="${not empty r.releaseReason}">
+									      <span class="badge bg-label-danger">상품불량</span>
+									    </c:when>
+									  </c:choose>
+									</td>
                                     <td>
                                       <fmt:formatDate value="${r.releaseCreatedAt}" pattern="yyyy-MM-dd"/>
                                     </td>
@@ -171,7 +169,7 @@
                               <thead class="table-light">
                                 <tr>
                                   <th>상품명</th>
-                                  <th style="width:140px">수량</th>
+                                  <th style="width:40%">출고수량</th>
                                 </tr>
                               </thead>
                               <tbody id="releaseDetailBody">

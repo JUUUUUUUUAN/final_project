@@ -13,6 +13,10 @@
     	<!-- 입고 요약 반영 -->
     	<!-- 재고 여부 -->
     	<select id="existsStock" parameterType="StockDTO" resultType="int">
+		  SELECT count(stock_quantity) FROM order_stock
+		  WHERE warehouse_id = #{warehouseId} AND item_id = #{itemId}
+		</select>
+		<select id="existsStockForRelease" parameterType="StockDTO" resultType="Integer">
 		  SELECT stock_quantity FROM order_stock
 		  WHERE warehouse_id = #{warehouseId} AND item_id = #{itemId}
 		</select>
@@ -112,7 +116,7 @@
 	        JOIN vendor_item vi
 	          ON h.item_id = vi.item_id
 	        WHERE h.input_id = #{inputId}
-	          AND h.stock_inout_type = 'OUT'
+	          AND h.stock_in_out_type = 'OUT'
 	    </select>
 		
     </mapper>

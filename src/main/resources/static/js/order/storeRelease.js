@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const inputId = row.dataset.inputId;
       document.getElementById("selectedInputId").innerText = inputId;
 
-      fetch(`/stock/release`)
+      fetch(`/stock/release?inputId=${inputId}`)
         .then(res => res.json())
         .then(data => {
           const tbody = document.getElementById("releaseDetailBody");
