@@ -60,7 +60,7 @@
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
-		<c:import url="/WEB-INF/views/template/aside.jsp"></c:import>
+		<c:import url="/WEB-INF/views/template/aside_store.jsp"></c:import>
         <!-- / Menu -->
 
         <!-- Layout container -->
@@ -68,14 +68,12 @@
 		<c:import url="/WEB-INF/views/template/header.jsp"></c:import>
         
           <!-- Content wrapper -->
-          <div class="content-wrapper d-flex flex-column">
+          <div class="content-wrapper">
             <!-- Content -->
 
-            <div class="container-xxl flex-grow-1 container-p-y d-flex align-items-center justify-content-center">
-              <div class="text-center">
-                <h1>존재하지 않는 가맹점 정보입니다.</h1>
-                <p>입력하신 주소가 정확한 지 다시 한번 확인해주세요.</p>
-                <a href="javascript:history.back()" class="btn btn-outline-secondary">이전 페이지</a>
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="row">
+			
               </div>
             </div>
             <!-- / Content -->

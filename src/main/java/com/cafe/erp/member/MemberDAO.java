@@ -36,8 +36,14 @@ public interface MemberDAO {
 	// 사원 재직 여부
 	public int InActive(MemberDTO memberDTO) throws Exception;
 	
-	// 조직도 리스트
-	public List<MemberDTO> chatList(Map<String, Object> val);
+	// 조직도 리스트 + 페이징
+	/*
+	 * public List<MemberDTO> chatList(Map<String, Object> val);
+	 */	
+	
+	Long chatListCount(GroupChartSearchDTO dto) throws Exception;
+	List<MemberDTO> chatList(GroupChartSearchDTO dto) throws Exception;
+
 	
 	// 부서별 인원 수
 	public List<Map<String, Object>> deptMemberCount(Map<String, Object> checkMem);
@@ -79,6 +85,10 @@ public interface MemberDAO {
 
 	// 상세페이지 직급 리스트 가져오기
 	public List<MemberDTO> positionList();
+	
+	// 부서명 변경
+	int updateDeptName(@Param("deptCode") int deptCode, @Param("memDeptName") String memDeptName);
+
 
 	
 	}

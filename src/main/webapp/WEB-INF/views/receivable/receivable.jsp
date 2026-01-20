@@ -56,6 +56,7 @@
     <link rel="stylesheet" href="/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <link rel="stylesheet" href="/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="/css/receivable/receivable.css" />
 
     <!-- Page CSS -->
 
@@ -83,116 +84,110 @@
           <div class="content-wrapper">
             <!-- Content -->
 
-            <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="row">
-              
-				<!-- 조회 조건 -->
-				<div class="card mb-4">
-				  <div class="card-header">
-				    <h5 class="mb-0">조회 조건</h5>
-				  </div>
-				
-				  <div class="card-body">
-				    <form id="searchForm" class="row g-3">
-				      <!-- 채권 발생 구분 -->
-				      <div class="col-md-3">
-				        <label class="form-label">채권 발생 구분</label>
-				        <select name="sourceType" class="form-select">
-				          <option value="">전체</option>
-				          <option value="CONTRACT">계약 미수금</option>
-				          <option value="ORDER">발주 미수금</option>
-				        </select>
-				      </div>
-				
-				      <!-- 기준 월 -->
-				      <div class="col-md-3">
-				        <label class="form-label">기준 월</label>
-				        <input 
-				        	type="text"
-				        	id="baseMonth" 
-				        	name="baseMonth"
-				        	placeholder="기준 월 선택"
-				        	class="form-control" />
-				      </div>
-				
-				      <!-- 지점명 -->
-				      <div class="col-md-3">
-				        <label class="form-label">지점명</label>
-				        <input type="text"
-				               name="storeName"
-				               class="form-control"
-				               placeholder="지점명 입력" />
-				      </div>
-				      <!-- 조회 버튼 -->
-				      <div class="col-md-3 d-flex align-items-end">
-				        <button type="button"
-				                class="btn btn-primary w-100"
-				                onclick="searchReceivables()">
-				          조회
-				        </button>
-				      </div>
-				      <input type="hidden" name="pager.page" value="1">
-				    </form>
-				  </div>
-				</div>
-				<!-- 조회 조건 끝 -->
-				
-				<!-- ================= 전체 미수금 요약 ================= -->
-				<div id="summaryArea" class="row mb-4 d-none">
-				
-				  <div class="col-md-4">
-				    <div class="card h-100">
-				      <div class="card-body">
-				        <div class="text-muted small">총 미수금</div>
-				        <h4 class="fw-bold text-danger mb-0" id="totalUnpaidAmount">0</h4>
-				      </div>
-				    </div>
-				  </div>
-				
-				  <div class="col-md-4">
-				    <div class="card h-100">
-				      <div class="card-body">
-				        <div class="text-muted small">미수 채권 수</div>
-				        <h4 class="fw-bold mb-0" id="receivableCount">0</h4>
-				      </div>
-				    </div>
-				  </div>
-				
-				  <div class="col-md-4">
-				    <div class="card h-100">
-				      <div class="card-body">
-				        <div class="text-muted small">기준 월</div>
-				        <h4 class="fw-bold mb-0" id="summaryBaseMonth">-</h4>
-				      </div>
-				    </div>
-				  </div>
-				
-				</div>
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h5 class="mb-0 fw-bold"><i class="bx bx-search-alt-2 me-2 text-primary"></i>조회 조건</h5>
+        </div>
+        <div class="card-body">
+          <form id="searchForm" class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">채권 발생 구분</label>
+              <select name="sourceType" class="form-select border-primary-subtle">
+                <option value="">전체</option>
+                <option value="CONTRACT">계약 미수금</option>
+                <option value="ORDER">발주 미수금</option>
+              </select>
+            </div>
 
-				
-				<div class="card">
-				  <div class="card-header d-flex justify-content-between align-items-center">
-				    <h5 class="mb-0">채권 목록 (미수금)</h5>
-				    <small class="text-muted">※ 조회 조건 선택 후 조회</small>
-				  </div>
-				
-				  <div class="card-body">
-				
-				    <!-- 조회 전 안내 -->
-				    <div id="emptyMessage"
-				         class="text-center text-muted py-5">
-				      조회 조건을 선택한 후 검색하세요.
-				    </div>
-				
-				    <!-- 조회 결과 테이블 -->
-				    <div id="receivableTableArea" class="table-responsive d-none">
-				      <!-- AJAX로 테이블 삽입 -->
-				    </div>
-				
-				  </div>
-				</div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">기준 월</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text"><i class="bx bx-calendar"></i></span>
+                <input type="text" id="baseMonth" name="baseMonth" placeholder="YYYY-MM" class="form-control border-primary-subtle" />
               </div>
             </div>
+
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">지점명</label>
+              <input type="text" name="storeName" class="form-control border-primary-subtle" placeholder="지점명 입력" />
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+              <button type="button" class="btn btn-primary w-100 fw-bold shadow-sm" onclick="searchReceivables()">
+                <i class="bx bx-search me-1"></i> 데이터 조회
+              </button>
+            </div>
+            <input type="hidden" name="pager.page" value="1">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="summaryArea" class="row mb-4 d-none">
+      <div class="col-md-4">
+        <div class="card bg-label-danger border-0 shadow-none">
+          <div class="card-body d-flex align-items-center">
+            <div class="avatar flex-shrink-0 me-3">
+              <span class="avatar-initial rounded bg-danger shadow-sm"><i class="bx bx-wallet"></i></span>
+            </div>
+            <div>
+              <small class="text-danger fw-semibold d-block">총 미수금</small>
+              <h4 class="fw-bold mb-0 text-dark" id="totalUnpaidAmount">0</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card bg-label-primary border-0 shadow-none">
+          <div class="card-body d-flex align-items-center">
+            <div class="avatar flex-shrink-0 me-3">
+              <span class="avatar-initial rounded bg-primary shadow-sm"><i class="bx bx-receipt"></i></span>
+            </div>
+            <div>
+              <small class="text-primary fw-semibold d-block">미수 채권 수</small>
+              <h4 class="fw-bold mb-0 text-dark" id="receivableCount">0</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card bg-label-secondary border-0 shadow-none">
+          <div class="card-body d-flex align-items-center">
+            <div class="avatar flex-shrink-0 me-3">
+              <span class="avatar-initial rounded bg-secondary shadow-sm"><i class="bx bx-calendar-check"></i></span>
+            </div>
+            <div>
+              <small class="text-secondary fw-semibold d-block">기준 월</small>
+              <h4 class="fw-bold mb-0 text-dark" id="summaryBaseMonth">-</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header border-bottom d-flex align-items-center justify-content-between">
+          <h5 class="mb-0 fw-bold">채권 목록 (미수금)</h5>
+          <span class="badge bg-label-info"><i class="bx bx-info-circle me-1"></i>실시간 데이터</span>
+        </div>
+        <div class="card-body p-0">
+          <div id="emptyMessage" class="text-center text-muted py-5">
+            <i class="bx bx-spreadsheet fs-1 d-block mb-3 opacity-25"></i>
+            조회 조건을 선택한 후 검색하세요.
+          </div>
+          <div id="receivableTableArea" class="table-responsive d-none">
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
             <!-- / Content -->
 
             <!-- Footer -->

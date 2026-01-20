@@ -33,6 +33,16 @@
 	        <if test="searchVocTitle != null and searchVocTitle != ''">
                 AND v.voc_title LIKE CONCAT('%', #{searchVocTitle}, '%')
             </if>
+
+			<if test="managerId != null and managerId != ''">
+				AND EXISTS (
+					SELECT 1
+					FROM store_manager_history smh
+					WHERE smh.store_id = v.store_id
+					AND smh.member_id = #{managerId}
+					AND smh.manage_end_date IS NULL
+				)
+			</if>
     	</where>
     </sql>
 
@@ -81,6 +91,19 @@
 		INSERT INTO voc(member_id, store_id, voc_title , voc_type, voc_contact, voc_contents, voc_status, voc_created_at, voc_updated_at) 
 		VALUES (#{memberId}, #{storeId}, #{vocTitle}, #{vocType}, #{vocContact}, #{vocContents}, 0, now(), now())
 	</insert>
+
+	<update id="editVoc" parameterType="VocDTO">
+		UPDATE voc
+		SET voc_title = #{vocTitle}, voc_contents = #{vocContents}, voc_updated_at = now()
+		WHERE voc_id = #{vocId}
+	</update>
+
+	<update id="editStatus" parameterType="Integer">
+		UPDATE voc
+		SET voc_status = 2, voc_updated_at = now()
+		WHERE voc_id = #{vocId}
+	</update>
+
 	<!-- 알림 용 가맹점주 정보 -->
 	<select id="vocOnwerInfo" parameterType="VocDTO" resultType="VocDTO">
 	    SELECT
@@ -295,8 +318,7 @@
 	    FROM voc v
 	    JOIN store_manager_history h 
 	      ON v.store_id = h.store_id
-	      AND v.voc_created_at >= h.manage_start_date 
-	      AND (h.manage_end_date IS NULL OR v.voc_created_at &lt;= h.manage_end_date)
+	      AND h.manage_end_date IS NULL
 	    JOIN member m ON h.member_id = m.member_id
 		<include refid="statCondition" />
 	    GROUP BY m.member_id

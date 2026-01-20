@@ -87,6 +87,11 @@
                         <li class="nav-item">
                         	<a href="/store/voc/list" class="nav-link active"><i class="bx bx-support me-1"></i> VOC</a>
                         </li>
+						<sec:authorize access="hasAnyRole('DEPT_SALES')">
+							<li class="nav-item">
+								<a href="/store/voc/my-list" class="nav-link"><i class="bx bx-user-check"></i> 담당 가맹점</a>
+							</li>
+						</sec:authorize>
                         <li class="nav-item">
                         	<a href="/store/voc/statistics" class="nav-link"><i class="bx bx-bar-chart-alt-2 me-1"></i> 통계</a>
                         </li>
@@ -96,7 +101,7 @@
                 <div id="tab-content-area">
                    	<div class="card shadow-none border bg-white mb-4">
 						<div class="card-body py-3 px-3">
-							<form id="vocSearchForm" method="get" action="/store/voc/list">
+							<form id="vocSearchForm" method="get" action="${baseUrl}">
 							    <input type="hidden" name="page" id="page" value="1">
 								<input type="hidden" name="perPage" id="hiddenPerPage" value="${pager.perPage}">
 							    <div class="row g-3">

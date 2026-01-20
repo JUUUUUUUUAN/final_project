@@ -57,6 +57,18 @@ public class VocController {
 		return isStoreOwner ? "view_store/store/voc_list" : "voc/list";
 	}
 
+	@PreAuthorize("hasAnyRole('DEPT_SALES')")
+	@GetMapping("my-list")
+	public String myVocList(VocSearchDTO searchDTO, Model model, @AuthenticationPrincipal UserDTO user) throws Exception {
+		searchDTO.setManagerId(user.getMember().getMemberId());
+
+		List<VocDTO> vocList = vocService.list(searchDTO);
+		model.addAttribute("list", vocList);
+		model.addAttribute("pager", searchDTO);
+
+		return "voc/list";
+	}
+
 	@PreAuthorize("hasAnyRole('DEPT_CS', 'EXEC', 'MASTER')")
 	@PostMapping("add")
 	@ResponseBody
@@ -86,6 +98,35 @@ public class VocController {
 		model.addAttribute("listSize", processList.size());
 		
 		return "voc/detail";
+	}
+
+	@PreAuthorize("hasAnyRole('DEPT_CS', 'EXEC', 'MASTER')")
+	@PostMapping("edit")
+	@ResponseBody
+	public Map<String, Object> editVoc(@RequestBody VocDTO vocDTO, @AuthenticationPrincipal UserDTO user) throws Exception {
+		boolean isCS = user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_DEPT_CS"));
+
+		if (isCS) {
+			VocDTO originDTO = vocService.detail(vocDTO.getVocId());
+			if (!originDTO.getMemberId().equals(user.getMember().getMemberId())) return result("해당 VOC의 작성자가 아닙니다.");
+		}
+
+		return result(vocService.editVoc(vocDTO));
+	}
+
+	@PreAuthorize("hasAnyRole('DEPT_SALES', 'EXEC', 'MASTER')")
+	@PostMapping("updateStatus")
+	@ResponseBody
+	public Map<String, Object> updateStatus(@RequestBody VocDTO vocDTO, @AuthenticationPrincipal UserDTO user) throws Exception {
+		boolean isSALES = user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_DEPT_SALES"));
+
+		if (isSALES) {
+			VocDTO originDTO = vocService.detail(vocDTO.getVocId());
+			boolean isManager = storeService.isCurrentManager(originDTO.getStoreId(), user.getMember().getMemberId());
+			if (!isManager) return result("해당 가맹점의 담당자가 아닙니다.");
+		}
+
+		return result(vocService.editStatus(vocDTO.getVocId()));
 	}
 
 	@PreAuthorize("hasAnyRole('STORE', 'DEPT_SALES', 'EXEC', 'MASTER')")
@@ -150,6 +191,35 @@ public class VocController {
 			row.createCell(6).setCellValue(dto.getOwnerName());
 			row.createCell(7).setCellValue(dto.getStoreAddress());
 			
+			row.createCell(8).setCellValue(dto.getVocType());
+			row.createCell(9).setCellValue(dto.getVocTitle());
+			row.createCell(10).setCellValue(dto.getVocStatusStr());
+			row.createCell(11).setCellValue(dto.getVocContact());
+			row.createCell(12).setCellValue(dto.getVocContents());
+			row.createCell(13).setCellValue(dto.getVocCreatedAtStr());
+			row.createCell(14).setCellValue(dto.getVocUpdatedAtStr());
+		});
+	}
+
+	@PreAuthorize("hasRole('DEPT_SALES')")
+	@GetMapping("my-downloadExcel")
+	public void myStoreDownloadExcel(VocSearchDTO searchDTO, HttpServletResponse response, @AuthenticationPrincipal UserDTO user) throws Exception {
+		searchDTO.setManagerId(user.getMember().getMemberId());
+
+		List<VocDTO> list = vocService.excelList(searchDTO);
+		String[] headers = {"ID", "작성자ID", "작성자", "가맹점ID", "가맹점명", "점주ID", "점주명", "주소",
+				"불만유형", "제목", "처리상태", "고객연락처", "상세내용", "작성일시", "수정일시"};
+
+		ExcelUtil.download(list, headers, "VOC 목록", response, (row, dto) -> {
+			row.createCell(0).setCellValue(dto.getVocId());
+			row.createCell(1).setCellValue(dto.getMemberId());
+			row.createCell(2).setCellValue(dto.getMemName());
+			row.createCell(3).setCellValue(dto.getStoreId());
+			row.createCell(4).setCellValue(dto.getStoreName());
+			row.createCell(5).setCellValue(dto.getOwnerId());
+			row.createCell(6).setCellValue(dto.getOwnerName());
+			row.createCell(7).setCellValue(dto.getStoreAddress());
+
 			row.createCell(8).setCellValue(dto.getVocType());
 			row.createCell(9).setCellValue(dto.getVocTitle());
 			row.createCell(10).setCellValue(dto.getVocStatusStr());
