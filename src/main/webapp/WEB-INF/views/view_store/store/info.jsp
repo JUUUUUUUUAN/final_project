@@ -18,7 +18,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>가맹점 관리</title>
+    <title>가맹점 정보</title>
 
     <meta name="description" content="" />
 

@@ -18,7 +18,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>QSC 리스트</title>
+    <title>QSC 항목 리스트</title>
 
     <meta name="description" content="" />
 
