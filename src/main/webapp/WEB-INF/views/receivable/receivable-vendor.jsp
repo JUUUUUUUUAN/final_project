@@ -50,6 +50,8 @@
     <link rel="stylesheet" href="/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="/vendor/libs/apex-charts/apex-charts.css" />
 
+
+    <link rel="stylesheet" href="/css/receivable/receivable-vendor.css" />
     <!-- Helpers -->
     <script src="/vendor/js/helpers.js"></script>
     <script src="/js/config.js"></script>
@@ -65,114 +67,108 @@
           <c:import url="/WEB-INF/views/template/header.jsp"/>
 
           <div class="content-wrapper">
-            <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="row">
-
-                <!-- 조회 조건 -->
-                <div class="card mb-4">
-                  <div class="card-header">
-                    <h5 class="mb-0">조회 조건</h5>
-                  </div>
-
-                  <div class="card-body">
-					<form id="searchForm" class="row g-3">
-					
-					
-					<!-- 지급 상태 -->
-					  <div class="col-md-3">
-					    <label class="form-label">지급 상태</label>
-					    <select name="payStatus" class="form-select">
-					      <option value="">전체</option>
-					      <option value="UNPAID">미지급</option>
-					      <option value="PARTIAL">부분 지급</option>
-					    </select>
-					  </div>
-					
-					  <!-- 기준 월 -->
-					  <div class="col-md-3">
-					    <label class="form-label">기준 월</label>
-					    <input type="text"
-					           id="baseMonth"
-					           name="baseMonth"
-					           class="form-control"
-					           placeholder="기준 월 선택" />
-					  </div>
-					
-					  <!-- 거래처명 -->
-					  <div class="col-md-3">
-					    <label class="form-label">거래처명</label>
-					    <input type="text"
-					           name="vendorName"
-					           class="form-control"
-					           placeholder="거래처명 입력" />
-					  </div>
-					
-
-					
-					  <!-- 조회 -->
-					  <div class="col-md-3 d-flex align-items-end">
-					    <button type="button"
-					            class="btn btn-primary w-100"
-					            onclick="searchPayables()">
-					      조회
-					    </button>
-					  </div>
-					
-					  <input type="hidden" name="pager.page" value="1">
-					</form>
-                  </div>
-                </div>
-
-                <!-- 요약 -->
-                <div id="summaryArea" class="row mb-4 d-none">
-
-                  <div class="col-md-4">
-                    <div class="card h-100">
-                      <div class="card-body">
-                        <div class="text-muted small">총 미지급금</div>
-                        <h4 class="fw-bold text-danger mb-0" id="totalUnpaidAmount">0</h4>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-4">
-                    <div class="card h-100">
-                      <div class="card-body">
-                        <div class="text-muted small">미지급 발주 수</div>
-                        <h4 class="fw-bold mb-0" id="payableCount">0</h4>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-4">
-                    <div class="card h-100">
-                      <div class="card-body">
-                        <div class="text-muted small">기준 월</div>
-                        <h4 class="fw-bold mb-0" id="summaryBaseMonth">-</h4>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <!-- 리스트 -->
-                <div class="card">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">본사 발주 미지급금 목록</h5>
-                    <small class="text-muted">※ 조회 조건 선택 후 조회</small>
-                  </div>
-
-                  <div class="card-body">
-                    <div id="emptyMessage" class="text-center text-muted py-5">
-                      조회 조건을 선택한 후 검색하세요.
-                    </div>
-
-                    <div id="payableTableArea" class="table-responsive d-none"></div>
-                  </div>
-                </div>
-
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h5 class="mb-0 fw-bold"><i class="bx bx-search-alt me-2 text-primary"></i>미지급금 조회 조건</h5>
+        </div>
+        <div class="card-body">
+          <form id="searchForm" class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">지급 상태</label>
+              <select name="payStatus" class="form-select border-primary-subtle">
+                <option value="">전체 상태</option>
+                <option value="UNPAID">미지급</option>
+                <option value="PARTIAL">부분 지급</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">기준 월</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text"><i class="bx bx-calendar"></i></span>
+                <input type="text" id="baseMonth" name="baseMonth" class="form-control border-primary-subtle" placeholder="YYYY-MM" />
               </div>
             </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">거래처명</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text"><i class="bx bx-buildings"></i></span>
+                <input type="text" name="vendorName" class="form-control border-primary-subtle" placeholder="거래처 검색" />
+              </div>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+              <button type="button" class="btn btn-primary w-100 fw-bold shadow-sm" onclick="searchPayables()">
+                <i class="bx bx-search-alt-2 me-1"></i> 데이터 조회
+              </button>
+            </div>
+            <input type="hidden" name="pager.page" value="1">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="summaryArea" class="row mb-4 d-none">
+      <div class="col-md-4">
+        <div class="card bg-label-danger border-0 shadow-none">
+          <div class="card-body d-flex align-items-center">
+            <div class="avatar flex-shrink-0 me-3">
+              <span class="avatar-initial rounded bg-danger shadow-sm"><i class="bx bx-error"></i></span>
+            </div>
+            <div>
+              <small class="text-danger fw-semibold d-block">총 미지급금 합계</small>
+              <h4 class="fw-bold mb-0 text-dark" id="totalUnpaidAmount">0</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-label-info border-0 shadow-none">
+          <div class="card-body d-flex align-items-center">
+            <div class="avatar flex-shrink-0 me-3">
+              <span class="avatar-initial rounded bg-info shadow-sm"><i class="bx bx-spreadsheet"></i></span>
+            </div>
+            <div>
+              <small class="text-info fw-semibold d-block">미지급 발주 건수</small>
+              <h4 class="fw-bold mb-0 text-dark" id="payableCount">0</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-label-secondary border-0 shadow-none">
+          <div class="card-body d-flex align-items-center">
+            <div class="avatar flex-shrink-0 me-3">
+              <span class="avatar-initial rounded bg-secondary shadow-sm"><i class="bx bx-calendar-check"></i></span>
+            </div>
+            <div>
+              <small class="text-secondary fw-semibold d-block">조회 대상 월</small>
+              <h4 class="fw-bold mb-0 text-dark" id="summaryBaseMonth">-</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold">본사 발주 미지급금 목록</h5>
+          <span class="badge bg-label-secondary">Search Result</span>
+        </div>
+        <div class="card-body p-0">
+          <div id="emptyMessage" class="text-center text-muted py-5">
+            <i class="bx bx-search-alt-2 fs-1 d-block mb-3 opacity-25"></i>
+            조회 조건을 선택한 후 검색하세요.
+          </div>
+          <div id="payableTableArea" class="table-responsive d-none">
+             </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
             <c:import url="/WEB-INF/views/template/footer.jsp"/>
             <div class="content-backdrop fade"></div>
@@ -185,125 +181,77 @@
 
 
 	
-	<!-- ============================
-	     지급 처리 모달 (최종본)
-	     ============================ -->
-	<div class="modal fade" id="payModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered modal-md">
-	    <div class="modal-content">
-	
-	      <!-- ===== Header ===== -->
-	      <div class="modal-header">
-	        <h5 class="modal-title">지급 등록</h5>
-	        <button type="button"
-	                class="btn-close"
-	                data-bs-dismiss="modal"
-	                aria-label="Close"></button>
-	      </div>
-	
-	      <!-- ===== Body ===== -->
-	      <div class="modal-body">
-	        <form id="payForm">
-	
-				<!-- hidden 값 -->
-				<input type="hidden" name="vendorId">
-				<input type="hidden" name="vendorCode">
-				<input type="hidden" name="baseMonth">
-				<input type="hidden" name="remainAmount">
-				
-				<!-- 채권 선택 -->
-				<div class="mb-3">
-				  <label class="form-label">채권 선택</label>
-				  <select class="form-select" name="receivableId" id="receivableSelect">
-				    <option value="">채권을 선택하세요</option>
-				  </select>
-				</div>
-	
-	          <!-- 거래처 / 기준월 -->
-	          <div class="row mb-3">
-	            <div class="col-md-6">
-	              <label class="form-label">거래처</label>
-	              <input type="text"
-	                     class="form-control"
-	                     name="vendorName"
-	                     readonly>
-	            </div>
-	            <div class="col-md-6">
-	              <label class="form-label">기준월</label>
-	              <input type="text"
-	                     class="form-control"
-	                     name="baseMonthView"
-	                     readonly>
-	            </div>
-	          </div>
-	
-	          <!-- 남은 금액 / 지급 금액 -->
-	          <div class="row mb-2">
-	            <div class="col-md-6">
-	              <label class="form-label">남은 미지급 금액</label>
-	              <input type="text"
-	                     class="form-control text-end"
-	                     name="remainAmountView"
-	                     readonly>
-	            </div>
-	            <div class="col-md-6">
-	              <label class="form-label">지급 금액</label>
-	              <input type="text"
-	                     class="form-control text-end"
-	                     name="payAmount"
-	                     value="0"
-	                     inputmode="numeric"
-	                     autocomplete="off">
-	            </div>
-	          </div>
-	
-	          <!-- 금액 버튼 -->
-	          <div class="mb-3">
-	            <button type="button"
-	                    class="btn btn-outline-secondary btn-sm pay-btn"
-	                    data-amount="10000">1만</button>
-	            <button type="button"
-	                    class="btn btn-outline-secondary btn-sm pay-btn"
-	                    data-amount="50000">5만</button>
-	            <button type="button"
-	                    class="btn btn-outline-secondary btn-sm pay-btn"
-	                    data-amount="100000">10만</button>
-	            <button type="button"
-	                    class="btn btn-outline-primary btn-sm"
-	                    id="btnPayAll">완납</button>
-	            <button type="button"
-	                    class="btn btn-outline-danger btn-sm"
-	                    id="btnPayReset">금액 초기화</button>
-	          </div>
-	
-	          <!-- 비고 -->
-	          <div class="mb-3">
-	            <label class="form-label">비고</label>
-	            <textarea class="form-control"
-	                      name="memo"
-	                      rows="3"></textarea>
-	          </div>
-	
-	        </form>
-	      </div>
-	
-	      <!-- ===== Footer ===== -->
-	      <div class="modal-footer">
-	        <button type="button"
-	                class="btn btn-secondary"
-	                data-bs-dismiss="modal">
-	          취소
-	        </button>
-	        <button type="button"
-	                class="btn btn-primary"
-	                id="btnPaySubmit">
-	          지급
-	        </button>
-	      </div>
-	
-	    </div>
-	  </div>
-	</div>
+<div class="modal fade" id="payModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white fw-bold"><i class="bx bx-wallet me-2"></i>미지급금 지급 등록</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="payForm">
+          <input type="hidden" name="vendorId">
+          <input type="hidden" name="vendorCode">
+          <input type="hidden" name="baseMonth">
+          <input type="hidden" name="remainAmount">
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">대상 채권 선택</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="bx bx-list-check"></i></span>
+              <select class="form-select border-primary-subtle fw-bold" name="receivableId" id="receivableSelect">
+                <option value="">채권을 선택하세요</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">거래처</label>
+              <input type="text" class="form-control bg-light border-0 fw-bold" name="vendorName" readonly>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">기준월</label>
+              <input type="text" class="form-control bg-light border-0 fw-bold" name="baseMonthView" readonly>
+            </div>
+          </div>
+
+          <div class="p-3 bg-label-secondary rounded mb-3 border border-dashed border-secondary">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="small fw-semibold">남은 미지급 잔액</span>
+              <input type="text" class="form-control-plaintext text-end fw-bold text-danger fs-5 py-0" name="remainAmountView" value="0" readonly>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold text-primary">금회 지급 금액</label>
+            <div class="input-group input-group-merge border-primary">
+              <span class="input-group-text"><i class="bx bx-won"></i></span>
+              <input type="text" class="form-control form-control-lg fw-bold text-primary border-primary-subtle" name="payAmount" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="mb-3 d-flex flex-wrap gap-1">
+            <button type="button" class="btn btn-outline-secondary btn-sm pay-btn" data-amount="10000">+1만</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm pay-btn" data-amount="50000">+5만</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm pay-btn" data-amount="100000">+10만</button>
+            <button type="button" class="btn btn-label-primary btn-sm px-3" id="btnPayAll">전액 완납</button>
+            <button type="button" class="btn btn-label-danger btn-sm" id="btnPayReset"><i class="bx bx-refresh"></i></button>
+          </div>
+
+          <div class="mb-0">
+            <label class="form-label">지급 비고 (메모)</label>
+            <textarea class="form-control" name="memo" rows="2" placeholder="전달사항 입력"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-light border-top">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary fw-bold" id="btnPaySubmit">지급 확정</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 	
     <!-- Core JS -->

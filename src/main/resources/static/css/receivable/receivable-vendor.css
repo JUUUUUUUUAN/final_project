@@ -1,0 +1,52 @@
+/* 1. 테이블 가독성 향상 */
+.table-hover tbody tr:hover {
+  background-color: rgba(105, 108, 255, 0.04) !important; /* 행 마우스 오버 시 연한 보라색 */
+  transition: 0.2s;
+}
+
+.table thead th {
+  text-transform: none !important; /* 헤더 영문 대문자 강제 변환 해제 */
+  letter-spacing: 0px !important;
+  font-weight: 600;
+}
+
+/* 2. 요약 카드(Summary) 그림자 및 둥글기 */
+#summaryArea .card {
+  border-radius: 0.5rem;
+  transition: transform 0.2s ease-in-out;
+}
+
+#summaryArea .card:hover {
+  transform: translateY(-3px); /* 마우스 올리면 살짝 들리는 효과 */
+}
+
+/* 3. 입력창 포커스 시 테두리 강조 */
+.form-control:focus, .form-select:focus {
+  border-color: #696cff !important;
+  box-shadow: 0 0 0 0.2rem rgba(105, 108, 255, 0.1) !important;
+}
+
+/* 4. 아바타 아이콘 중앙 정렬 */
+.avatar-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 1. 테이블 전체 너비가 너무 넓어 보이지 않도록 좌우 패딩 추가 */
+#receivableTableArea {
+    padding: 0 1rem; /* 테이블 좌우에 약간의 공간을 주어 시선을 중앙으로 집중 */
+}
+
+/* 2. 각 셀의 최소 너비 설정 (텍스트 줄바꿈 방지) */
+.table th, .table td {
+    white-space: nowrap;
+    padding-top: 0.85rem !important;
+    padding-bottom: 0.85rem !important;
+}
+
+/* 3. 행(row) 사이의 구분선을 연하게 하여 덜 산만하게 함 */
+.table > :not(caption) > * > * {
+    border-bottom-width: 1px;
+    border-color: #f0f2f4 !important;
+}
