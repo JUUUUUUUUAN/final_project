@@ -59,8 +59,9 @@
       </ul>
     </li>
     <!-- 거래처 등록 -->
+    
     <li class="menu-item">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <a href="javascript:void(0);" class="menu-link">
         <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
         <div data-i18n="Authentications">거래처</div>
       </a>
