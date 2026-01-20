@@ -253,7 +253,11 @@ public class OrderController {
 	// 본사출고완료
 	@PostMapping("updateReceiveStatusByStoreOrder")
 	@ResponseBody
+	@Transactional
 	public String updateReceiveStatusByStoreOrder(@RequestBody List<OrderRequestDTO> orderNos) {
+		for (OrderRequestDTO orderNo : orderNos) {
+			orderService.shipStoreOrder(orderNo.getOrderNo());	
+		}
 		orderService.updateReceiveStatusByStoreOrder(orderNos);
 		return "redirect:/order/receive";
 	}
@@ -273,7 +277,7 @@ public class OrderController {
 		orderService.inoutOrder(orderNos, "IN");
 		return "redirect:/order/receive";
 	}
-	// 가맹 출고 요청
+	// 가맹 재고사용 요청
 	@PostMapping("release")
 	@ResponseBody
 	public String release(@RequestBody List<OrderRequestDTO> orderNos) {

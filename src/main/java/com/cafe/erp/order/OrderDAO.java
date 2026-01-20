@@ -60,6 +60,7 @@ public interface OrderDAO {
 	public void cancelApproveHqOrder(@Param("orderNo") String orderNo);
 	public void cancelApproveStoreOrder(@Param("orderNo") String orderNo);
 	
+	public Integer selectStockQty(@Param("itemId") Integer itemId);
 	public void updateReceiveStatusByStoreOrder(@Param("orderNo") String orderNo);
 	public void updateCancelReceiveStatusByStoreOrder(@Param("orderNo") String orderNo);
 

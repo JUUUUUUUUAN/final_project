@@ -424,6 +424,30 @@ public class OrderService {
 			}
 		}
 	}
+	@Transactional
+	public void shipStoreOrder(String storeOrderId) {
+
+	    // 1. 발주 상세 조회
+	    List<OrderDetailDTO> items =
+	    		orderDAO.getStoreOrderDetail(storeOrderId);
+
+	    if (items.isEmpty()) {
+	        throw new IllegalStateException("발주 상세 없음");
+	    }
+
+	    // 2. 재고 검증
+	    for (OrderDetailDTO item : items) {
+
+	        Integer stockQty = orderDAO.selectStockQty(item.getItemId());
+
+	        if (stockQty < item.getHqOrderQty() || stockQty == null ) {
+	            throw new IllegalStateException("재고 부족: itemId=" + item.getItemId());
+	        }
+	    }
+
+	    // 3. 상태 변경 (여기서만!)
+	    orderDAO.updateReceiveStatusByStoreOrder(storeOrderId);
+	}
 	public void updateReceiveStatusByStoreOrder(List<OrderRequestDTO> orderNos) {
 		for (OrderRequestDTO orderNo : orderNos) {
 			orderDAO.updateReceiveStatusByStoreOrder(orderNo.getOrderNo());										
