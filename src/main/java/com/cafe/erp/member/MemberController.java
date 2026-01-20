@@ -92,7 +92,7 @@ public class MemberController {
 	@GetMapping("calendar")
 	@ResponseBody
 	public List<Map<String, Object>> holidayView(@AuthenticationPrincipal UserDTO userDTO) throws Exception{
-		List<CompanyHolidayDTO> list = companyHolidayService.selectHolidaysList();
+		List<CompanyHolidayDTO> list = companyHolidayService.selectHolidayAllActive();
 		int memberId = userDTO.getMember().getMemberId();
 		
 		

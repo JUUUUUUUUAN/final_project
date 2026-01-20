@@ -448,7 +448,7 @@
 										            <i class='bx bx-search me-1'></i> 조회
 										          </button>
 										          <button type="button" class="btn btn-outline-success flex-grow-1" onclick="downloadAttendanceExcel()">
-										            <i class='bx bx-download me-1'></i> Excel
+										            <i class='bx bx-download me-1'></i> 엑셀 다운
 										          </button>
 										        </div>
 										      </div>
@@ -619,7 +619,7 @@
 															      <i class='bx bx-search me-1'></i> 조회
 															    </button>
 															    <button type="button" class="btn btn-outline-success flex-grow-1" onclick="downloadVacationExcel()">
-															      <i class='bx bx-download me-1'></i> Excel
+															      <i class='bx bx-download me-1'></i> 엑셀 다운
 															    </button>
 															  </div>
 															</div>

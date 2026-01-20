@@ -224,7 +224,7 @@
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
-          <a href="/member/company_holiday_list" class="menu-link">
+          <a href="/member/admin_holiday_list" class="menu-link">
             <div data-i18n="Accordion">휴무일 목록</div>
           </a>
         </li>
